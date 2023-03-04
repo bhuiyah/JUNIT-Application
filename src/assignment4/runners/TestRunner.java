@@ -20,20 +20,26 @@ public class TestRunner {
 
     public TestClassResult run() throws InstantiationException, IllegalAccessException, InvocationTargetException, AssertionException {
         // TODO: complete this method
+        //We need to document results from all the methods
         TestClassResult classResult = new TestClassResult(testClass.getName());
         for(Method method: testClass.getDeclaredMethods()) {
+            //we need to see if the method has the proper annotation; if so, run it.
             if (method.isAnnotationPresent(Test.class)) {
+                //everytime we have a correct annotation, we need to create a new object of the class and the run the method
                 Object obj = testClass.newInstance();
                 TestMethodResult methodResult;
+                //if there is no assertion error, the test passes and we print it out and document it
                 try {
                     method.invoke(obj);
                     methodResult = new TestMethodResult(method.getName(), true, null);
                     System.out.println("test." + classResult.getTestClassName() + "." + method.getName() + " : PASS");
                 }
+                //if there is an assertion error, we get that assertion and document that there is an error and print that out
                 catch(AssertionException E){
                     methodResult = new TestMethodResult(method.getName(), false, E);
                     System.out.println("test." + classResult.getTestClassName() + "." + method.getName() + " : FAIL");
                 }
+                //after calling the method, we add the method attributes into our classResult
                 classResult.addTestMethodResult(methodResult);
             }
         }
