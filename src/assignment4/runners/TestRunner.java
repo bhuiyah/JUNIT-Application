@@ -28,9 +28,11 @@ public class TestRunner {
                 try {
                     method.invoke(obj);
                     methodResult = new TestMethodResult(method.getName(), true, null);
+                    System.out.println("test." + classResult.getTestClassName() + "." + method.getName() + " : PASS");
                 }
                 catch(AssertionException E){
                     methodResult = new TestMethodResult(method.getName(), false, E);
+                    System.out.println("test." + classResult.getTestClassName() + "." + method.getName() + " : FAIL");
                 }
                 classResult.addTestMethodResult(methodResult);
             }

@@ -18,16 +18,17 @@ public class TestDriver {
             results[i] = runner.run();
             i++;
         }
+        System.out.println("==========");
+        System.out.println("FAILURES:");
         for(TestClassResult result : results){
-            for(TestMethodResult method : result.getTestMethodResults()){
-                if(method.isPass()){
-                    System.out.println("test." + result.getTestClassName() + "." + method.getName() + " : PASS");
-                }
-                else{
-                    System.out.println("test." + result.getTestClassName() + "." + method.getName() + " : FAIL");
+            for(TestMethodResult method : result.getTestMethodResults()) {
+                if(!method.isPass()){
+                    System.out.println("test." + result.getTestClassName() + "." + method.getName() + " :");
+                    method.getException().printStackTrace();
                 }
             }
         }
+        System.out.println("==========");
         // We will call this method from our JUnit test cases.
     }
 
