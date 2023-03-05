@@ -28,16 +28,16 @@ public class TestRunner {
                 //everytime we have a correct annotation, we need to create a new object of the class and the run the method
                 Object obj = testClass.newInstance();
                 TestMethodResult methodResult;
-                //if there is no assertion error, the test passes and we print it out and document it
+                //if there is no assertion error, the test passes, and we print it out and document it
                 try {
                     method.invoke(obj);
                     methodResult = new TestMethodResult(method.getName(), true, null);
-                    System.out.println("test." + classResult.getTestClassName() + "." + method.getName() + " : PASS");
+                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
                 }
                 //if there is an assertion error, we get that assertion and document that there is an error and print that out
-                catch(AssertionException E){
+                catch(AssertionException E){ //this is where I'm struggling to figure out how to catch the exception
                     methodResult = new TestMethodResult(method.getName(), false, E);
-                    System.out.println("test." + classResult.getTestClassName() + "." + method.getName() + " : FAIL");
+                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
                 }
                 //after calling the method, we add the method attributes into our classResult
                 classResult.addTestMethodResult(methodResult);

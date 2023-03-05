@@ -3,7 +3,6 @@ package assignment4.driver;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
 import assignment4.runners.TestRunner;
-import com.sun.scenario.effect.impl.sw.java.JSWBlend_SRC_OUTPeer;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -25,9 +24,13 @@ public class TestDriver {
         //after going through all the classes, we have to find which methods resulted in an error and print them
         System.out.println("==========");
         System.out.println("FAILURES:");
+        int failures = 0;
+        int tests = 0;
         for(TestClassResult result : results){
             for(TestMethodResult method : result.getTestMethodResults()) {
+                tests++;
                 if(!method.isPass()){
+                    failures++;
                     System.out.println("test." + result.getTestClassName() + "." + method.getName() + " :");
                     //printStackTrace was recommended to us
                     method.getException().printStackTrace();
@@ -35,6 +38,7 @@ public class TestDriver {
             }
         }
         System.out.println("==========");
+        System.out.println("Tests run: " + tests + ", Failures: " + failures);
         // We will call this method from our JUnit test cases.
     }
 
