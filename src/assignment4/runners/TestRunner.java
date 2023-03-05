@@ -39,6 +39,11 @@ public class TestRunner {
                     methodResult = new TestMethodResult(method.getName(), false, E);
                     System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
                 }
+                catch (InvocationTargetException I){
+                    Throwable T = I.getCause();
+                    methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
+                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
+                }
                 //after calling the method, we add the method attributes into our classResult
                 classResult.addTestMethodResult(methodResult);
             }
