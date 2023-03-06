@@ -5,10 +5,12 @@ import assignment4.annotations.Ordered;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
 import assignment4.runners.AlphabeticalTestRunner;
+import assignment4.runners.FilteredTestRunner;
 import assignment4.runners.OrderedTestRunner;
 import assignment4.runners.TestRunner;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
 public class TestDriver {
 
@@ -18,20 +20,43 @@ public class TestDriver {
         int i = 0;
         for(String testClass: testClasses){
             //first step is to make the string a class. Will be assumed that there will be valid names to find the class
-            Class<?> test = Class.forName(testClass);
-            TestRunner runner = new TestRunner(test);
-            if(test.isAnnotationPresent(Alphabetical.class)){
-                AlphabeticalTestRunner runner1 = new AlphabeticalTestRunner(test);
-                results[i] = runner1.runAlphabetical();
+            if(testClass.contains("#")){
+                String testName = testClass.substring(0, testClass.indexOf("#"));
+                ArrayList<String> filteredMethods = new ArrayList<>();
+                String temp = "";
+                for(int j = testClass.indexOf("#") + 1; j < testClass.length(); j++){
+                    if(testClass.charAt(j) == ','){
+                        filteredMethods.add(temp);
+                        temp = "";
+                    }
+                    else if(j == testClass.length() - 1){
+                        temp += testClass.charAt(j);
+                        filteredMethods.add(temp);
+                    }
+                    else{
+                        temp += testClass.charAt(j);
+                    }
+                }
+                Class<?> test = Class.forName(testName);
+                FilteredTestRunner filteredTest = new FilteredTestRunner(test, filteredMethods);
+                results[i] = filteredTest.runFiltered();
             }
-            if(test.isAnnotationPresent(Ordered.class)) {
-                OrderedTestRunner runner2 = new OrderedTestRunner(test);
-                results[i] = runner2.runOrdered();
-            }else{
-                //running will do all the methods that have the appropriate annotations and print
-                results[i] = runner.run();
+            else{
+                Class<?> test = Class.forName(testClass);
+                TestRunner runner = new TestRunner(test);
+                if(test.isAnnotationPresent(Alphabetical.class)){
+                    AlphabeticalTestRunner runner1 = new AlphabeticalTestRunner(test);
+                    results[i] = runner1.runAlphabetical();
+                }
+                if(test.isAnnotationPresent(Ordered.class)) {
+                    OrderedTestRunner runner2 = new OrderedTestRunner(test);
+                    results[i] = runner2.runOrdered();
+                }else{
+                    //running will do all the methods that have the appropriate annotations and print
+                    results[i] = runner.run();
+                }
+                //proceed with the next class inputted
             }
-            //proceed with the next class inputted
             i++;
         }
         //after going through all the classes, we have to find which methods resulted in an error and print them
