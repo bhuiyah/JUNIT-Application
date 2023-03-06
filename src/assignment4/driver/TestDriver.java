@@ -2,12 +2,10 @@ package assignment4.driver;
 
 import assignment4.annotations.Alphabetical;
 import assignment4.annotations.Ordered;
+import assignment4.annotations.Parameterized;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
-import assignment4.runners.AlphabeticalTestRunner;
-import assignment4.runners.FilteredTestRunner;
-import assignment4.runners.OrderedTestRunner;
-import assignment4.runners.TestRunner;
+import assignment4.runners.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -44,11 +42,15 @@ public class TestDriver {
             else{
                 Class<?> test = Class.forName(testClass);
                 TestRunner runner = new TestRunner(test);
-                if(test.isAnnotationPresent(Alphabetical.class)){
+                if(test.isAnnotationPresent(Parameterized.class)){
+                    ParameterizedTestRunner extraRunner = new ParameterizedTestRunner(test);
+                    results[i] = extraRunner.runParameterized();
+                }
+                else if(test.isAnnotationPresent(Alphabetical.class)){
                     AlphabeticalTestRunner runner1 = new AlphabeticalTestRunner(test);
                     results[i] = runner1.runAlphabetical();
                 }
-                if(test.isAnnotationPresent(Ordered.class)) {
+                else if(test.isAnnotationPresent(Ordered.class)) {
                     OrderedTestRunner runner2 = new OrderedTestRunner(test);
                     results[i] = runner2.runOrdered();
                 }else{
