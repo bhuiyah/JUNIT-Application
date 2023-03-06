@@ -34,12 +34,8 @@ public class TestRunner {
                     methodResult = new TestMethodResult(method.getName(), true, null);
                     System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
                 }
-                //if there is an assertion error, we get that assertion and document that there is an error and print that out
-                catch(AssertionException E){ //this is where I'm struggling to figure out how to catch the exception
-                    methodResult = new TestMethodResult(method.getName(), false, E);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                }
-                catch (InvocationTargetException I){
+                //if there is any error, we get that assertion and document that there is an error and print that out
+                catch (Exception I){
                     Throwable T = I.getCause();
                     methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
                     System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");

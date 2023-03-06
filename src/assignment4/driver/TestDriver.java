@@ -23,7 +23,8 @@ public class TestDriver {
             if(test.isAnnotationPresent(Alphabetical.class)){
                 AlphabeticalTestRunner runner1 = new AlphabeticalTestRunner(test);
                 results[i] = runner1.runAlphabetical();
-            }if(test.isAnnotationPresent(Ordered.class)) {
+            }
+            if(test.isAnnotationPresent(Ordered.class)) {
                 OrderedTestRunner runner2 = new OrderedTestRunner(test);
                 results[i] = runner2.runOrdered();
             }else{
@@ -60,15 +61,3 @@ public class TestDriver {
         runTests(args);
     }
 }
-
-
-//terminal to specify what classes to run
-//(string) - test class use java reflection library to pull the class to our files
-//test class is found
-//we can create instances of the class
-//
-/*
-Class<?> temp = Class.forName(str)
-temp
-
- */
