@@ -9,6 +9,7 @@ import assignment4.results.TestMethodResult;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 
 public class AlphabeticalTestRunner extends TestRunner {
 

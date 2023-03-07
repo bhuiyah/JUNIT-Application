@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class TestDriver {
 
-    public static void runTests(String[] testClasses) throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public static void runTests(String[] testClasses) throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
         //start with having all the results for each class in an array for organization
         TestClassResult[] results = new TestClassResult[testClasses.length];
         int i = 0;
@@ -71,7 +71,7 @@ public class TestDriver {
                 tests++;
                 if(!method.isPass()){
                     failures++;
-                    System.out.println("test." + result.getTestClassName() + "." + method.getName() + " :");
+                    System.out.println(result.getTestClassName() + "." + method.getName() + " :");
                     //printStackTrace was recommended to us
                     method.getException().printStackTrace();
                 }
@@ -82,7 +82,7 @@ public class TestDriver {
         // We will call this method from our JUnit test cases.
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
         // Use this for your testing.  We will not be calling this method.
         //only method we need in main
         runTests(args);
