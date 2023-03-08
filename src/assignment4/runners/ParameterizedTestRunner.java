@@ -291,19 +291,19 @@ public class ParameterizedTestRunner extends TestRunner {
                 Object obj = testClass.newInstance();
                 TestMethodResult methodResult = null;
 
-                    for (int i = 0; i < parameters.length; i++) {
-                        try {
-                            method.invoke(obj, parameters[i]);
-                            methodResult = new TestMethodResult(method.getName(), true, null);
-                            System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + parameters[i] + "] : PASS");
-                            classResult.addTestMethodResult(methodResult);
-                        } catch (Exception I) {
-                            Throwable T = I.getCause();
-                            methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                            System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                            classResult.addTestMethodResult(methodResult);
-                        }
+                for (int i = 0; i < parameters.length; i++) {
+                    try {
+                        method.invoke(obj, parameters[i]);
+                        methodResult = new TestMethodResult(method.getName(), true, null);
+                        System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + parameters[i] + "] : PASS");
+                        classResult.addTestMethodResult(methodResult);
+                    } catch (Exception I) {
+                        Throwable T = I.getCause();
+                        methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
+                        System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
+                        classResult.addTestMethodResult(methodResult);
                     }
+                }
             }
             //we need to see if the method has the proper annotation; if so, run it.
             else if (method.isAnnotationPresent(Test.class)) {

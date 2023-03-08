@@ -12,10 +12,9 @@ import java.util.ArrayList;
 
 public class TestDriver {
 
-    public static void runTests(String[] testClasses) throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
+    public static void runTests(String[] testClasses) {
         //start with having all the results for each class in an array for organization
-        TestClassResult[] results = new TestClassResult[testClasses.length];
-        int i = 0;
+        ArrayList<TestClassResult> results = new ArrayList<>();
         for(String testClass: testClasses){
             //first step is to make the string a class. Will be assumed that there will be valid names to find the class
             if(testClass.contains("#")){
@@ -35,31 +34,38 @@ public class TestDriver {
                         temp += testClass.charAt(j);
                     }
                 }
-                Class<?> test = Class.forName(testName);
-                FilteredTestRunner filteredTest = new FilteredTestRunner(test, filteredMethods);
-                results[i] = filteredTest.runFiltered();
+                try {
+                    Class<?> test = Class.forName(testName);
+                    FilteredTestRunner filteredTest = new FilteredTestRunner(test, filteredMethods);
+                    results.add(filteredTest.runFiltered()) ;
+                }
+                catch(ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException ignored){
+
+                }
             }
-            else{
-                Class<?> test = Class.forName(testClass);
-                TestRunner runner = new TestRunner(test);
-                if(test.isAnnotationPresent(Parameterized.class)){
-                    ParameterizedTestRunner extraRunner = new ParameterizedTestRunner(test);
-                    results[i] = extraRunner.runParameterized();
+            else {
+                try {
+                    Class<?> test = Class.forName(testClass);
+                    TestRunner runner = new TestRunner(test);
+                    if (test.isAnnotationPresent(Parameterized.class)) {
+                        ParameterizedTestRunner extraRunner = new ParameterizedTestRunner(test);
+                        results.add(extraRunner.runParameterized());
+                    } else if (test.isAnnotationPresent(Alphabetical.class)) {
+                        AlphabeticalTestRunner runner1 = new AlphabeticalTestRunner(test);
+                        results.add(runner1.runAlphabetical());
+                    } else if (test.isAnnotationPresent(Ordered.class)) {
+                        OrderedTestRunner runner2 = new OrderedTestRunner(test);
+                        results.add(runner2.runOrdered());
+                    } else {
+                        //running will do all the methods that have the appropriate annotations and print
+                        results.add(runner.run());
+                    }
+                    //proceed with the next class inputted
                 }
-                else if(test.isAnnotationPresent(Alphabetical.class)){
-                    AlphabeticalTestRunner runner1 = new AlphabeticalTestRunner(test);
-                    results[i] = runner1.runAlphabetical();
+                catch(ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchFieldException ignored){
+
                 }
-                else if(test.isAnnotationPresent(Ordered.class)) {
-                    OrderedTestRunner runner2 = new OrderedTestRunner(test);
-                    results[i] = runner2.runOrdered();
-                }else{
-                    //running will do all the methods that have the appropriate annotations and print
-                    results[i] = runner.run();
-                }
-                //proceed with the next class inputted
             }
-            i++;
         }
         //after going through all the classes, we have to find which methods resulted in an error and print them
         System.out.println("==========");
@@ -82,7 +88,7 @@ public class TestDriver {
         // We will call this method from our JUnit test cases.
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
+    public static void main(String[] args){
         // Use this for your testing.  We will not be calling this method.
         //only method we need in main
         runTests(args);

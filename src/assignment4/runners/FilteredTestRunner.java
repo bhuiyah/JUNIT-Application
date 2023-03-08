@@ -12,7 +12,7 @@ import java.util.List;
 public class FilteredTestRunner extends TestRunner {
 
     List<String> testMethods;
-    public FilteredTestRunner(Class testClass, List<String> testMethods) {
+    public FilteredTestRunner(Class testClass, List<String> testMethods) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         super(testClass);
         this.testMethods = testMethods;
     }

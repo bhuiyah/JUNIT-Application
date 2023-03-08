@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 
 public class OrderedTestRunner extends TestRunner {
 
-    public OrderedTestRunner(Class testClass) {
+    public OrderedTestRunner(Class testClass) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         super(testClass);
     }
 

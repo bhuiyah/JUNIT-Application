@@ -13,7 +13,7 @@ import java.util.Collections;
 
 public class AlphabeticalTestRunner extends TestRunner {
 
-    public AlphabeticalTestRunner(Class testClass) {
+    public AlphabeticalTestRunner(Class testClass) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         super(testClass);
     }
 
