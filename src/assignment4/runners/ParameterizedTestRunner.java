@@ -73,6 +73,29 @@ public class ParameterizedTestRunner extends TestRunner {
         return classResult;
     }
 
+    public TestClassResult generalRunner(Method method, TestClassResult classResult) throws InstantiationException, IllegalAccessException {
+        if (method.isAnnotationPresent(Test.class)) {
+            //everytime we have a correct annotation, we need to create a new object of the class and the run the method
+            Object obj = testClass.newInstance();
+            TestMethodResult methodResult;
+            //if there is no assertion error, the test passes, and we print it out and document it
+            try {
+                method.invoke(obj);
+                methodResult = new TestMethodResult(method.getName(), true, null);
+                System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
+            }
+            //if there is any error, we get that assertion and document that there is an error and print that out
+            catch (Exception I) {
+                Throwable T = I.getCause();
+                methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
+                System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
+            }
+            //after calling the method, we add the method attributes into our classResult
+            classResult.addTestMethodResult(methodResult);
+        }
+        return classResult;
+    }
+
     public TestClassResult runInt(Method[] methods, int[] parameters, TestClassResult classResult) throws InstantiationException, IllegalAccessException {
         for (Method method : methods) {
             if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
@@ -94,23 +117,7 @@ public class ParameterizedTestRunner extends TestRunner {
             }
             //we need to see if the method has the proper annotation; if so, run it.
             else if (method.isAnnotationPresent(Test.class)) {
-                //everytime we have a correct annotation, we need to create a new object of the class and the run the method
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult;
-                //if there is no assertion error, the test passes, and we print it out and document it
-                try {
-                    method.invoke(obj);
-                    methodResult = new TestMethodResult(method.getName(), true, null);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
-                }
-                //if there is any error, we get that assertion and document that there is an error and print that out
-                catch (Exception I) {
-                    Throwable T = I.getCause();
-                    methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                }
-                //after calling the method, we add the method attributes into our classResult
-                classResult.addTestMethodResult(methodResult);
+                classResult = generalRunner(method, classResult);
             }
         }
         return classResult;
@@ -137,23 +144,7 @@ public class ParameterizedTestRunner extends TestRunner {
             }
             //we need to see if the method has the proper annotation; if so, run it.
             else if (method.isAnnotationPresent(Test.class)) {
-                //everytime we have a correct annotation, we need to create a new object of the class and the run the method
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult;
-                //if there is no assertion error, the test passes, and we print it out and document it
-                try {
-                    method.invoke(obj);
-                    methodResult = new TestMethodResult(method.getName(), true, null);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
-                }
-                //if there is any error, we get that assertion and document that there is an error and print that out
-                catch (Exception I) {
-                    Throwable T = I.getCause();
-                    methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                }
-                //after calling the method, we add the method attributes into our classResult
-                classResult.addTestMethodResult(methodResult);
+                classResult = generalRunner(method, classResult);
             }
         }
         return classResult;
@@ -180,23 +171,7 @@ public class ParameterizedTestRunner extends TestRunner {
             }
             //we need to see if the method has the proper annotation; if so, run it.
             else if (method.isAnnotationPresent(Test.class)) {
-                //everytime we have a correct annotation, we need to create a new object of the class and the run the method
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult;
-                //if there is no assertion error, the test passes, and we print it out and document it
-                try {
-                    method.invoke(obj);
-                    methodResult = new TestMethodResult(method.getName(), true, null);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
-                }
-                //if there is any error, we get that assertion and document that there is an error and print that out
-                catch (Exception I) {
-                    Throwable T = I.getCause();
-                    methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                }
-                //after calling the method, we add the method attributes into our classResult
-                classResult.addTestMethodResult(methodResult);
+                classResult = generalRunner(method, classResult);
             }
         }
         return classResult;
@@ -223,23 +198,7 @@ public class ParameterizedTestRunner extends TestRunner {
             }
             //we need to see if the method has the proper annotation; if so, run it.
             else if (method.isAnnotationPresent(Test.class)) {
-                //everytime we have a correct annotation, we need to create a new object of the class and the run the method
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult;
-                //if there is no assertion error, the test passes, and we print it out and document it
-                try {
-                    method.invoke(obj);
-                    methodResult = new TestMethodResult(method.getName(), true, null);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
-                }
-                //if there is any error, we get that assertion and document that there is an error and print that out
-                catch (Exception I) {
-                    Throwable T = I.getCause();
-                    methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                }
-                //after calling the method, we add the method attributes into our classResult
-                classResult.addTestMethodResult(methodResult);
+                classResult = generalRunner(method, classResult);
             }
         }
         return classResult;
@@ -266,23 +225,7 @@ public class ParameterizedTestRunner extends TestRunner {
             }
             //we need to see if the method has the proper annotation; if so, run it.
             else if (method.isAnnotationPresent(Test.class)) {
-                //everytime we have a correct annotation, we need to create a new object of the class and the run the method
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult;
-                //if there is no assertion error, the test passes, and we print it out and document it
-                try {
-                    method.invoke(obj);
-                    methodResult = new TestMethodResult(method.getName(), true, null);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
-                }
-                //if there is any error, we get that assertion and document that there is an error and print that out
-                catch (Exception I) {
-                    Throwable T = I.getCause();
-                    methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                }
-                //after calling the method, we add the method attributes into our classResult
-                classResult.addTestMethodResult(methodResult);
+                classResult = generalRunner(method, classResult);
             }
         }
         return classResult;
@@ -309,23 +252,7 @@ public class ParameterizedTestRunner extends TestRunner {
             }
             //we need to see if the method has the proper annotation; if so, run it.
             else if (method.isAnnotationPresent(Test.class)) {
-                //everytime we have a correct annotation, we need to create a new object of the class and the run the method
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult;
-                //if there is no assertion error, the test passes, and we print it out and document it
-                try {
-                    method.invoke(obj);
-                    methodResult = new TestMethodResult(method.getName(), true, null);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
-                }
-                //if there is any error, we get that assertion and document that there is an error and print that out
-                catch (Exception I) {
-                    Throwable T = I.getCause();
-                    methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                }
-                //after calling the method, we add the method attributes into our classResult
-                classResult.addTestMethodResult(methodResult);
+                classResult = generalRunner(method, classResult);
             }
         }
         return classResult;
@@ -352,23 +279,7 @@ public class ParameterizedTestRunner extends TestRunner {
             }
             //we need to see if the method has the proper annotation; if so, run it.
             else if (method.isAnnotationPresent(Test.class)) {
-                //everytime we have a correct annotation, we need to create a new object of the class and the run the method
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult;
-                //if there is no assertion error, the test passes, and we print it out and document it
-                try {
-                    method.invoke(obj);
-                    methodResult = new TestMethodResult(method.getName(), true, null);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
-                }
-                //if there is any error, we get that assertion and document that there is an error and print that out
-                catch (Exception I) {
-                    Throwable T = I.getCause();
-                    methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                }
-                //after calling the method, we add the method attributes into our classResult
-                classResult.addTestMethodResult(methodResult);
+                classResult = generalRunner(method, classResult);
             }
         }
         return classResult;
@@ -396,23 +307,7 @@ public class ParameterizedTestRunner extends TestRunner {
             }
             //we need to see if the method has the proper annotation; if so, run it.
             else if (method.isAnnotationPresent(Test.class)) {
-                //everytime we have a correct annotation, we need to create a new object of the class and the run the method
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult;
-                //if there is no assertion error, the test passes, and we print it out and document it
-                try {
-                    method.invoke(obj);
-                    methodResult = new TestMethodResult(method.getName(), true, null);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
-                }
-                //if there is any error, we get that assertion and document that there is an error and print that out
-                catch (Exception I) {
-                    Throwable T = I.getCause();
-                    methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                    System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                }
-                //after calling the method, we add the method attributes into our classResult
-                classResult.addTestMethodResult(methodResult);
+                classResult = generalRunner(method, classResult);
             }
         }
         return classResult;
