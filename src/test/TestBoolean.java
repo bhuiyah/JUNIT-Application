@@ -5,18 +5,22 @@ import assignment4 . annotations . Test ;
 import assignment4 . annotations . UseParameters ;
 import assignment4 . assertions . Assert ;
 @Parameterized
-public class TestF {
+
+public class TestBoolean {
     @Parameters
-    public static double [] parameters () {
-        return new double []{1 , 2, 3};
+    public static Boolean[] parameters() {
+        return new Boolean[]{true, false};
     }
-    @Test
-    public void test1 () {
-        Assert . assertTrue ( true );
-    }
+
     @Test
     @UseParameters
-    public void test2 ( double i ) {
-        Assert . assertEquals (i , i );
+    public void testexpectedtrue(Boolean b){
+        Assert.assertEquals(true, b);
+    }
+
+    @Test
+    @UseParameters
+    public void testexpectedfalse(Boolean b){
+        Assert.assertEquals(false, b);
     }
 }
