@@ -77,7 +77,7 @@ public class TestDriver {
                 tests++;
                 if(!method.isPass()){
                     failures++;
-                    System.out.println(result.getTestClassName() + "." + method.getName() + " :");
+                    System.out.println(result.getTestClassName() + "." + method.getName() + ":");
                     //printStackTrace was recommended to us
                     method.getException().printStackTrace();
                 }
