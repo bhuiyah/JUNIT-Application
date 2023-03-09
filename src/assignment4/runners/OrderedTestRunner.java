@@ -52,9 +52,18 @@ public class OrderedTestRunner extends TestRunner {
         for(int i = 1; i < methods.length; i++){
             Method key = methods[i];
             int j = i - 1;
-            while(j >= 0 && methods[j].getDeclaredAnnotation(Order.class).value() > key.getDeclaredAnnotation(Order.class).value()){
+            int mval = Integer.MAX_VALUE;
+            int kval = Integer.MAX_VALUE;
+            if(key.isAnnotationPresent(Order.class)){
+                kval = key.getDeclaredAnnotation(Order.class).value();
+            }
+            if(methods[j].isAnnotationPresent(Order.class)) {
+                mval = methods[j].getDeclaredAnnotation(Order.class).value();
+            }
+            while(j >= 0 && mval > kval){
                 methods[j + 1] = methods[j];
                 j--;
+                mval = methods[j].getDeclaredAnnotation(Order.class).value();
             }
             methods[j + 1] = key;
         }
