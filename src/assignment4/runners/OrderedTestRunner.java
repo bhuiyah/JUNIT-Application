@@ -22,8 +22,7 @@ public class OrderedTestRunner extends TestRunner {
         // TODO: complete this method
         //We need to document results from all the methods
         TestClassResult classResult = new TestClassResult(testClass.getName());
-        Method[] methods = testClass.getDeclaredMethods();
-        methods = sortMethods(methods);
+        Method[] methods = sortMethods(testClass.getDeclaredMethods());
         for(Method method: methods) {
             //we need to see if the method has the proper annotation; if so, run it.
             if (method.isAnnotationPresent(Test.class)) {
@@ -49,7 +48,6 @@ public class OrderedTestRunner extends TestRunner {
         return classResult;
     }
 
-    //insertion sort from GeeksforGeeks
     public static Method[] sortMethods(Method[] methods){
         for(int i = 1; i < methods.length; i++){
             Method key = methods[i];
