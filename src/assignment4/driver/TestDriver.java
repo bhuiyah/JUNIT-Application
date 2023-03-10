@@ -85,7 +85,6 @@ public class TestDriver {
         }
         System.out.println("==========");
         System.out.println("Tests run: " + tests + ", Failures: " + failures);
-        System.out.println("Expected: foo, atest, testC, TestA, b0, foo1");
         // We will call this method from our JUnit test cases.
     }
 
