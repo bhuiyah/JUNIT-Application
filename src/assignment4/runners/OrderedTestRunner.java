@@ -6,6 +6,7 @@ import assignment4.annotations.Test;
 import assignment4.assertions.AssertionException;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
+import java.util.ArrayList;
 
 import javax.lang.model.type.DeclaredType;
 import java.lang.reflect.AnnotatedType;
@@ -49,28 +50,30 @@ public class OrderedTestRunner extends TestRunner {
         return classResult;
     }
 
-    public static Method[] sortMethods(Method[] methods){
-        for(int i = 1; i < methods.length; i++){
-            Method key = methods[i];
-            int j = i - 1;
-            int mval = Integer.MAX_VALUE; //Initial values for the test methods
-            int kval = Integer.MAX_VALUE;
-            //if @Order annotation is present, update its value
-            if(key.isAnnotationPresent(Order.class)){
-                kval = key.getDeclaredAnnotation(Order.class).value();
+    public static Method[] sortMethods(Method[] methods) {
+        int maxval;
+        for(int i = methods.length - 1; i >= 0; i--){
+            int max_idx = i;
+            int right = Integer.MAX_VALUE;
+            if(methods[i].isAnnotationPresent(Order.class)){
+                right = methods[i].getDeclaredAnnotation(Order.class).value();
             }
-            if(methods[j].isAnnotationPresent(Order.class)) {
-                mval = methods[j].getDeclaredAnnotation(Order.class).value();
-            }
-            //Shift the method until it is in its correct spot
-            while(j >= 0 && mval > kval){
-                methods[j + 1] = methods[j];
-                j--;
-                if (j > 0 && methods[j].isAnnotationPresent(Order.class)) {
-                    mval = methods[j].getDeclaredAnnotation(Order.class).value();
+            maxval = right;
+            for(int j = i - 1; j >= 0; j--){
+                int left = Integer.MAX_VALUE;
+                if(methods[j].isAnnotationPresent(Order.class)){
+                    left = methods[j].getDeclaredAnnotation(Order.class).value();
+                }
+                if(left > right && left > maxval){
+                    max_idx = j;
+                    maxval = left;
                 }
             }
-            methods[j + 1] = key;
+            if(max_idx != i){
+                Method temp = methods[i];
+                methods[i] = methods[max_idx];
+                methods[max_idx] = temp;
+            }
         }
         return methods;
     }
