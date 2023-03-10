@@ -20,56 +20,43 @@ public class ParameterizedTestRunner extends TestRunner {
 
     public TestClassResult runParameterized() throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {
         TestClassResult classResult = new TestClassResult(testClass.getName());
-        int found = 0;
-        for (Method method : testClass.getDeclaredMethods()) {
+        Object parameters = null;
+        Method[] methods = testClass.getDeclaredMethods();
+        for (Method method : methods) {
             if (method.isAnnotationPresent(Parameters.class)) {
-                found = 1;
-                Object obj = testClass.newInstance();
-                String type = method.getReturnType().toString();
-                switch (type) {
-                    case "class [I":
-                        int[] intArr = (int[]) method.invoke(obj);
-                        classResult = runInt(testClass.getDeclaredMethods(), intArr, classResult);
-                        break;
-
-                    case "class [C":
-                        char[] charArr = (char[]) method.invoke(obj);
-                        classResult = runChar(testClass.getDeclaredMethods(), charArr, classResult);
-                        break;
-
-                    case "class [Z":
-                        boolean[] boolArr = (boolean[]) method.invoke(obj);
-                        classResult = runBool(testClass.getDeclaredMethods(), boolArr, classResult);
-                        break;
-
-                    case "class [B":
-                        byte[] byteArr = (byte[]) method.invoke(obj);
-                        classResult = runByte(testClass.getDeclaredMethods(), byteArr, classResult);
-                        break;
-
-                    case "class [S":
-                        short[] shortArr = (short[]) method.invoke(obj);
-                        classResult = runShort(testClass.getDeclaredMethods(), shortArr, classResult);
-                        break;
-
-                    case "class [J":
-                        long[] longArr = (long[]) method.invoke(obj);
-                        classResult = runLong(testClass.getDeclaredMethods(), longArr, classResult);
-                        break;
-
-                    case "class [F":
-                        float[] floatArr = (float[]) method.invoke(obj);
-                        classResult = runFloat(testClass.getDeclaredMethods(), floatArr, classResult);
-                        break;
-
-                    case "class [D":
-                        double[] doubleArr = (double[]) method.invoke(obj);
-                        classResult = runDouble(testClass.getDeclaredMethods(), doubleArr, classResult);
-                        break;
+                try{
+                    Object obj = testClass.newInstance();
+                    parameters = method.invoke(obj);
+                }
+                catch(Exception E){
+                    throw new RuntimeException(E);
                 }
             }
         }
-        if(found == 0) super.run();
+        for (Method method : methods) {
+            if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
+                Object obj = testClass.newInstance();
+                TestMethodResult methodResult = null;
+                for (int i = 0; i < Array.getLength(parameters); i++) {
+                    Object p = Array.get(parameters, i);
+                    try {
+                        method.invoke(obj, p);
+                        methodResult = new TestMethodResult(method.getName(), true, null);
+                        System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + p + "] : PASS");
+                        classResult.addTestMethodResult(methodResult);
+                    } catch (Exception I) {
+                        Throwable T = I.getCause();
+                        methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
+                        System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + p + "] : FAIL");
+                        classResult.addTestMethodResult(methodResult);
+                    }
+                }
+            }
+            //we need to see if the method has the proper annotation; if so, run it.
+            else if (method.isAnnotationPresent(Test.class)) {
+                classResult = generalRunner(method, classResult);
+            }
+        }
         return classResult;
     }
 
@@ -92,223 +79,6 @@ public class ParameterizedTestRunner extends TestRunner {
             }
             //after calling the method, we add the method attributes into our classResult
             classResult.addTestMethodResult(methodResult);
-        }
-        return classResult;
-    }
-
-    public TestClassResult runInt(Method[] methods, int[] parameters, TestClassResult classResult) throws InstantiationException, IllegalAccessException {
-        for (Method method : methods) {
-            if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult = null;
-                for (int i = 0; i < parameters.length; i++) {
-                    try {
-                        method.invoke(obj, parameters[i]);
-                        methodResult = new TestMethodResult(method.getName(), true, null);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + parameters[i] + "] : PASS");
-                        classResult.addTestMethodResult(methodResult);
-                    } catch (Exception I) {
-                        Throwable T = I.getCause();
-                        methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                        classResult.addTestMethodResult(methodResult);
-                    }
-                }
-            }
-            //we need to see if the method has the proper annotation; if so, run it.
-            else if (method.isAnnotationPresent(Test.class)) {
-                classResult = generalRunner(method, classResult);
-            }
-        }
-        return classResult;
-    }
-
-    public TestClassResult runChar(Method[] methods, char[] parameters, TestClassResult classResult) throws InstantiationException, IllegalAccessException {
-        for (Method method : methods) {
-            if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult = null;
-                for (int i = 0; i < parameters.length; i++) {
-                    try {
-                        method.invoke(obj, parameters[i]);
-                        methodResult = new TestMethodResult(method.getName(), true, null);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + parameters[i] + "] : PASS");
-                        classResult.addTestMethodResult(methodResult);
-                    } catch (Exception I) {
-                        Throwable T = I.getCause();
-                        methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                        classResult.addTestMethodResult(methodResult);
-                    }
-                }
-            }
-            //we need to see if the method has the proper annotation; if so, run it.
-            else if (method.isAnnotationPresent(Test.class)) {
-                classResult = generalRunner(method, classResult);
-            }
-        }
-        return classResult;
-    }
-
-    public TestClassResult runBool (Method[] methods, boolean[] parameters, TestClassResult classResult) throws InstantiationException, IllegalAccessException {
-        for (Method method : methods) {
-            if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult = null;
-                for (int i = 0; i < parameters.length; i++) {
-                    try {
-                        method.invoke(obj, parameters[i]);
-                        methodResult = new TestMethodResult(method.getName(), true, null);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + parameters[i] + "] : PASS");
-                        classResult.addTestMethodResult(methodResult);
-                    } catch (Exception I) {
-                        Throwable T = I.getCause();
-                        methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                        classResult.addTestMethodResult(methodResult);
-                    }
-                }
-            }
-            //we need to see if the method has the proper annotation; if so, run it.
-            else if (method.isAnnotationPresent(Test.class)) {
-                classResult = generalRunner(method, classResult);
-            }
-        }
-        return classResult;
-    }
-
-    public TestClassResult runByte (Method[] methods, byte[] parameters, TestClassResult classResult) throws InstantiationException, IllegalAccessException {
-        for (Method method : methods) {
-            if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult = null;
-                for (int i = 0; i < parameters.length; i++) {
-                    try {
-                        method.invoke(obj, parameters[i]);
-                        methodResult = new TestMethodResult(method.getName(), true, null);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + parameters[i] + "] : PASS");
-                        classResult.addTestMethodResult(methodResult);
-                    } catch (Exception I) {
-                        Throwable T = I.getCause();
-                        methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                        classResult.addTestMethodResult(methodResult);
-                    }
-                }
-            }
-            //we need to see if the method has the proper annotation; if so, run it.
-            else if (method.isAnnotationPresent(Test.class)) {
-                classResult = generalRunner(method, classResult);
-            }
-        }
-        return classResult;
-    }
-
-    public TestClassResult runShort (Method[] methods, short[] parameters, TestClassResult classResult) throws InstantiationException, IllegalAccessException {
-        for (Method method : methods) {
-            if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult = null;
-                for (int i = 0; i < parameters.length; i++) {
-                    try {
-                        method.invoke(obj, parameters[i]);
-                        methodResult = new TestMethodResult(method.getName(), true, null);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + parameters[i] + "] : PASS");
-                        classResult.addTestMethodResult(methodResult);
-                    } catch (Exception I) {
-                        Throwable T = I.getCause();
-                        methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                        classResult.addTestMethodResult(methodResult);
-                    }
-                }
-            }
-            //we need to see if the method has the proper annotation; if so, run it.
-            else if (method.isAnnotationPresent(Test.class)) {
-                classResult = generalRunner(method, classResult);
-            }
-        }
-        return classResult;
-    }
-
-    public TestClassResult runLong (Method[] methods, long[] parameters, TestClassResult classResult) throws InstantiationException, IllegalAccessException {
-        for (Method method : methods) {
-            if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult = null;
-                for (int i = 0; i < parameters.length; i++) {
-                    try {
-                        method.invoke(obj, parameters[i]);
-                        methodResult = new TestMethodResult(method.getName(), true, null);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + parameters[i] + "] : PASS");
-                        classResult.addTestMethodResult(methodResult);
-                    } catch (Exception I) {
-                        Throwable T = I.getCause();
-                        methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                        classResult.addTestMethodResult(methodResult);
-                    }
-                }
-            }
-            //we need to see if the method has the proper annotation; if so, run it.
-            else if (method.isAnnotationPresent(Test.class)) {
-                classResult = generalRunner(method, classResult);
-            }
-        }
-        return classResult;
-    }
-
-    public TestClassResult runFloat (Method[] methods, float[] parameters, TestClassResult classResult) throws InstantiationException, IllegalAccessException {
-        for (Method method : methods) {
-            if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult = null;
-                for (int i = 0; i < parameters.length; i++) {
-                    try {
-                        method.invoke(obj, parameters[i]);
-                        methodResult = new TestMethodResult(method.getName(), true, null);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + parameters[i] + "] : PASS");
-                        classResult.addTestMethodResult(methodResult);
-                    } catch (Exception I) {
-                        Throwable T = I.getCause();
-                        methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                        classResult.addTestMethodResult(methodResult);
-                    }
-                }
-            }
-            //we need to see if the method has the proper annotation; if so, run it.
-            else if (method.isAnnotationPresent(Test.class)) {
-                classResult = generalRunner(method, classResult);
-            }
-        }
-        return classResult;
-    }
-
-    public TestClassResult runDouble (Method[] methods, double[] parameters, TestClassResult classResult) throws InstantiationException, IllegalAccessException {
-        for (Method method : methods) {
-            if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
-                Object obj = testClass.newInstance();
-                TestMethodResult methodResult = null;
-
-                for (int i = 0; i < parameters.length; i++) {
-                    try {
-                        method.invoke(obj, parameters[i]);
-                        methodResult = new TestMethodResult(method.getName(), true, null);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + parameters[i] + "] : PASS");
-                        classResult.addTestMethodResult(methodResult);
-                    } catch (Exception I) {
-                        Throwable T = I.getCause();
-                        methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                        System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
-                        classResult.addTestMethodResult(methodResult);
-                    }
-                }
-            }
-            //we need to see if the method has the proper annotation; if so, run it.
-            else if (method.isAnnotationPresent(Test.class)) {
-                classResult = generalRunner(method, classResult);
-            }
         }
         return classResult;
     }
