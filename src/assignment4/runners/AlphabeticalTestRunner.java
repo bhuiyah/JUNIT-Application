@@ -48,7 +48,6 @@ public class AlphabeticalTestRunner extends TestRunner {
         return classResult;
     }
 
-    //insertion sort from GeeksforGeeks
     public static Method[] sortMethods(Method[] methods){
         for(int i = 1; i < methods.length; i++){
             Method key = methods[i];
