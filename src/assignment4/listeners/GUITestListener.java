@@ -42,5 +42,8 @@ public class GUITestListener implements TestListener {
     // Call this method right after the test method finished running and failed
     @Override
     public void testFailed(TestMethodResult testMethodResult) {
+        Text text = new Text("FAIL\n");
+        root.getChildren().add(text);
+        stage.show();
     }
 }

@@ -3,32 +3,26 @@ package assignment4.runners;
 import assignment4.annotations.Test;
 import assignment4.assertions.Assert;
 import assignment4.assertions.AssertionException;
-import assignment4.listeners.GUITestListener;
 import assignment4.listeners.TestListener;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
-import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 
-public class TestRunner {
-    Class<?> testClass;
+public class AlphabeticalTestRunner extends TestRunner {
 
-    public TestRunner(Class testClass) {
-        // TODO: complete this constructor
-        this.testClass = testClass;
+    public AlphabeticalTestRunner(Class testClass) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+        super(testClass);
     }
 
-    public TestClassResult run() throws InstantiationException, IllegalAccessException, InvocationTargetException, AssertionException {
+    public TestClassResult runAlphabetical() throws InstantiationException, IllegalAccessException, InvocationTargetException, AssertionException {
         // TODO: complete this method
         //We need to document results from all the methods
         TestClassResult classResult = new TestClassResult(testClass.getName());
-        GUITestListener gui = new GUITestListener();
-        for(Method method: testClass.getDeclaredMethods()) {
-            gui.testStarted(classResult.getTestClassName() + "." + method.getName());
+        Method[] methods = sortMethods(testClass.getDeclaredMethods());
+        for(Method method: methods) {
             //we need to see if the method has the proper annotation; if so, run it.
             if (method.isAnnotationPresent(Test.class)) {
                 //everytime we have a correct annotation, we need to create a new object of the class and the run the method
@@ -38,14 +32,12 @@ public class TestRunner {
                 try {
                     method.invoke(obj);
                     methodResult = new TestMethodResult(method.getName(), true, null);
-                    gui.testSucceeded(methodResult);
                     System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
                 }
-                //if there is any error, we get that assertion and document that there is an error and print that out
+                //if there is an any error, we get that assertion and document that there is an error and print that out
                 catch (Exception I){
                     Throwable T = I.getCause();
                     methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
-                    gui.testFailed(methodResult);
                     System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
                 }
                 //after calling the method, we add the method attributes into our classResult
@@ -55,7 +47,16 @@ public class TestRunner {
         return classResult;
     }
 
-    public void addListener(TestListener listener) {
-        // Do NOT implement this method for Assignment 4
+    public static Method[] sortMethods(Method[] methods){
+        for(int i = 1; i < methods.length; i++){
+            Method key = methods[i];
+            int j = i - 1;
+            while(j >= 0 && key.toString().compareTo(methods[j].toString()) < 0){
+                methods[j + 1] = methods[j];
+                j--;
+            }
+            methods[j + 1] = key;
+        }
+        return methods;
     }
 }
