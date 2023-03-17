@@ -3,6 +3,7 @@ package assignment4.gui;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -21,7 +22,7 @@ import javafx.stage.Stage;
 import static assignment4.driver.TestDriver.runTests;
 public class TestGUIController implements Initializable{
     //These are for the Listview
-    @FXML private ListView listView;
+    @FXML private ListView<String> listView;
     @FXML private TextField searchBar;
     @FXML private Button RunButton;
     @FXML private TextArea runningTests;
@@ -29,33 +30,39 @@ public class TestGUIController implements Initializable{
     public void initialize(URL url, ResourceBundle rb){
         File directory = new File("src/test/");
         String [] contents = directory.list();
-        ListView<String> list = new ListView<>();
-        ObservableList<String> items = FXCollections.observableArrayList (contents);
-        list.setItems(items);
-        list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        listView.getItems().add(list);
+        for(int i = 0; i < Objects.requireNonNull(contents).length; i++){
+            contents[i] = contents[i].substring(0, contents[i].indexOf(".java"));
+        }
+//        ListView<String> list = new ListView<>();
+//        ObservableList<String> items = FXCollections.observableArrayList (contents);
+//        list.setItems(items);
+//        list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+//        listView.getItems().add(String.valueOf(list));
+        listView.getItems().addAll(contents);
+
     }
 
     //This will take the tests that are selected and place them into the text box
-    //Doesn't work
     public void testselect(){
-        String selectedtest = "";
-        ObservableList<String> listoftests = listView.getSelectionModel().getSelectedItems();
-        for(Object test : listoftests){
-            selectedtest += test.toString();
-            selectedtest += " ";
-            System.out.println(selectedtest);
+        String selectedTest = listView.getSelectionModel().getSelectedItem();
+        if(searchBar.getText().equals("")){
+            searchBar.setText(searchBar.getText() + selectedTest);
         }
-        searchBar.setText(selectedtest);
+        else{
+            searchBar.setText(searchBar.getText() + " " + selectedTest);
+        }
     }
 
-    //Also doesn't work
     public void RunButtonSelected(){
-        String[] selectedtest = new String[listView.getSelectionModel().getSelectedItems().size()];
-        ObservableList<String> listoftests = listView.getSelectionModel().getSelectedItems();
-        for(Object test : listoftests){
-            selectedtest[listoftests.indexOf(test)] = test.toString();
+//        String[] selectedtest = new String[listView.getSelectionModel().getSelectedItems().size()];
+        String [] selectedTest = searchBar.getText().split(" ");
+        for(int i = 0; i<selectedTest.length; i++){
+            selectedTest[i] = "test." + selectedTest[i];
         }
-        runTests(selectedtest);
+        runTests(selectedTest);
+    }
+
+    public void printToScreen(String text){
+        runningTests.setText(runningTests.getText() + text);
     }
 }
