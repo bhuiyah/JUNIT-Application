@@ -7,6 +7,7 @@ import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
 import assignment4.runners.*;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
@@ -64,6 +65,8 @@ public class TestDriver {
                 }
                 catch(ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchFieldException ignored){
 
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }

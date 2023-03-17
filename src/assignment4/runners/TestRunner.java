@@ -3,6 +3,7 @@ package assignment4.runners;
 import assignment4.annotations.Test;
 import assignment4.assertions.Assert;
 import assignment4.assertions.AssertionException;
+import assignment4.gui.TestGUIController;
 import assignment4.listeners.GUITestListener;
 import assignment4.listeners.TestListener;
 import assignment4.results.TestClassResult;
@@ -11,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -22,7 +24,7 @@ public class TestRunner {
         this.testClass = testClass;
     }
 
-    public TestClassResult run() throws InstantiationException, IllegalAccessException, InvocationTargetException, AssertionException {
+    public TestClassResult run() throws InstantiationException, IllegalAccessException, InvocationTargetException, AssertionException, IOException {
         // TODO: complete this method
         //We need to document results from all the methods
         TestClassResult classResult = new TestClassResult(testClass.getName());

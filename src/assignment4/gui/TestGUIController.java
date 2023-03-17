@@ -2,10 +2,14 @@ package assignment4.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import assignment4.listeners.GUITestListener;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableArray;
@@ -19,13 +23,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+
 import static assignment4.driver.TestDriver.runTests;
+
 public class TestGUIController implements Initializable{
     //These are for the Listview
     @FXML private ListView<String> listView;
     @FXML private TextField searchBar;
     @FXML private Button RunButton;
     @FXML private TextArea runningTests;
+    private volatile Service<String> backgroundThread;
+    private GUITestListener listener;
+    private PrintStream ps;
+
     @Override
     public void initialize(URL url, ResourceBundle rb){
         File directory = new File("src/test/");
@@ -39,8 +51,9 @@ public class TestGUIController implements Initializable{
 //        list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 //        listView.getItems().add(String.valueOf(list));
         listView.getItems().addAll(contents);
-
     }
+
+
 
     //This will take the tests that are selected and place them into the text box
     public void testselect(){
@@ -63,6 +76,12 @@ public class TestGUIController implements Initializable{
     }
 
     public void printToScreen(String text){
-        runningTests.setText(runningTests.getText() + text);
+        runningTests.appendText(text);
+
     }
+
+    public void setListener(GUITestListener listener){
+        this.listener = listener;
+    }
+
 }
