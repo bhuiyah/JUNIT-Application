@@ -13,9 +13,7 @@ public class TestGUI extends Application {
     public void start(Stage applicationStage) throws Exception{
         // TODO: Implement this method
         Parent root = FXMLLoader.load(getClass().getResource("TestGUI.fxml"));
-
         Scene scene = new Scene(root);
-
         applicationStage.setScene(scene);
         applicationStage.setTitle("JUNIT Application");
         applicationStage.show();
