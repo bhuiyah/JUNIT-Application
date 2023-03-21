@@ -24,6 +24,7 @@ public class OrderedTestRunner extends TestRunner {
         TestClassResult classResult = new TestClassResult(testClass.getName());
         Method[] methods = sortMethods(testClass.getDeclaredMethods());
         for(Method method: methods) {
+            gui.testStarted("Starting " + classResult.getTestClassName() + "." + method.getName() + " : ");
             //we need to see if the method has the proper annotation; if so, run it.
             if (method.isAnnotationPresent(Test.class)) {
                 //everytime we have a correct annotation, we need to create a new object of the class and the run the method
@@ -33,12 +34,14 @@ public class OrderedTestRunner extends TestRunner {
                 try {
                     method.invoke(obj);
                     methodResult = new TestMethodResult(method.getName(), true, null);
+                    gui.testSucceeded(methodResult);
                     System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
                 }
                 //if there is an any error, we get that assertion and document that there is an error and print that out
                 catch (Exception I){
                     Throwable T = I.getCause();
                     methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
+                    gui.testFailed(methodResult);
                     System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
                 }
                 //after calling the method, we add the method attributes into our classResult

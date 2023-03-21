@@ -52,6 +52,7 @@ public class TestGUIController implements Initializable{
             contents[i] = contents[i].substring(0, contents[i].indexOf(".java"));
         }
         listView.getItems().addAll(contents);
+        listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
 
     //This will take the tests that are selected and place them into the text box

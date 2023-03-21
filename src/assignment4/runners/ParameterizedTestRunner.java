@@ -36,6 +36,7 @@ public class ParameterizedTestRunner extends TestRunner {
             }
         }
         for (Method method : methods) {
+            gui.testStarted("Starting " + classResult.getTestClassName() + "." + method.getName() + " : ");
             if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
                 Object obj = testClass.newInstance();
                 TestMethodResult methodResult = null;
@@ -44,11 +45,13 @@ public class ParameterizedTestRunner extends TestRunner {
                     try {
                         method.invoke(obj, p);
                         methodResult = new TestMethodResult(method.getName(), true, null);
+                        gui.testSucceeded(methodResult);
                         System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + p + "] : PASS");
                         classResult.addTestMethodResult(methodResult);
                     } catch (Exception I) {
                         Throwable T = I.getCause();
                         methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
+                        gui.testFailed(methodResult);
                         System.out.println(classResult.getTestClassName() + "." + method.getName() + "[" + p + "] : FAIL");
                         classResult.addTestMethodResult(methodResult);
                     }
@@ -64,6 +67,7 @@ public class ParameterizedTestRunner extends TestRunner {
 
     public TestClassResult generalRunner(Method method, TestClassResult classResult) throws InstantiationException, IllegalAccessException {
         if (method.isAnnotationPresent(Test.class)) {
+            gui.testStarted("Starting " + classResult.getTestClassName() + "." + method.getName() + " : ");
             //everytime we have a correct annotation, we need to create a new object of the class and the run the method
             Object obj = testClass.newInstance();
             TestMethodResult methodResult;
@@ -71,12 +75,14 @@ public class ParameterizedTestRunner extends TestRunner {
             try {
                 method.invoke(obj);
                 methodResult = new TestMethodResult(method.getName(), true, null);
+                gui.testSucceeded(methodResult);
                 System.out.println(classResult.getTestClassName() + "." + method.getName() + " : PASS");
             }
             //if there is any error, we get that assertion and document that there is an error and print that out
             catch (Exception I) {
                 Throwable T = I.getCause();
                 methodResult = new TestMethodResult(method.getName(), false, (AssertionException) T);
+                gui.testFailed(methodResult);
                 System.out.println(classResult.getTestClassName() + "." + method.getName() + " : FAIL");
             }
             //after calling the method, we add the method attributes into our classResult
