@@ -36,12 +36,12 @@ public class ParameterizedTestRunner extends TestRunner {
             }
         }
         for (Method method : methods) {
-            gui.testStarted("Starting " + classResult.getTestClassName() + "." + method.getName() + " : ");
             if (method.isAnnotationPresent((Test.class)) && method.isAnnotationPresent(UseParameters.class)) {
                 Object obj = testClass.newInstance();
                 TestMethodResult methodResult = null;
                 for (int i = 0; i < Array.getLength(parameters); i++) {
                     Object p = Array.get(parameters, i);
+                    gui.testStarted("Starting " + classResult.getTestClassName() + "." + method.getName() + "[" + p + "] : ");
                     try {
                         method.invoke(obj, p);
                         methodResult = new TestMethodResult(method.getName(), true, null);

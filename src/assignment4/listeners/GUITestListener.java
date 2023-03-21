@@ -47,7 +47,7 @@ public class GUITestListener implements TestListener {
     }
 
     public void printSum(ArrayList<TestClassResult> results){
-        controller.getTextArea().appendText("----------\n");
+        controller.getTextArea().appendText("----------------------------------------\n");
         controller.getTextArea().appendText("FAILURES:\n");
         int failures = 0;
         int tests = 0;
@@ -64,9 +64,9 @@ public class GUITestListener implements TestListener {
                 }
             }
         }
-        controller.getTextArea().appendText("----------\n");
+        controller.getTextArea().appendText("----------------------------------------\n");
         controller.getTextArea().appendText("Tests run: " + tests + ", Failures: " + failures + "\n");
-        controller.getTextArea().appendText("==========\n");
+        controller.getTextArea().appendText("========================================\n");
         // We will call this method from our JUnit test cases.
     }
 }
