@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 import assignment4.listeners.GUITestListener;
+import assignment4.listeners.PrintToScreen;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -25,7 +26,12 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.beans.value.ObservableValue;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import static assignment4.driver.TestDriver.addListener;
 import static assignment4.driver.TestDriver.runTests;
 
 public class TestGUIController implements Initializable{
@@ -34,10 +40,7 @@ public class TestGUIController implements Initializable{
     @FXML private TextField searchBar;
     @FXML private Button RunButton;
     @FXML private TextArea runningTests;
-    private volatile Service<String> backgroundThread;
-    private GUITestListener listener;
-    private PrintStream ps;
-
+    @FXML private Button RerunButton;
     @Override
     public void initialize(URL url, ResourceBundle rb){
         File directory = new File("src/test/");
@@ -45,15 +48,8 @@ public class TestGUIController implements Initializable{
         for(int i = 0; i < Objects.requireNonNull(contents).length; i++){
             contents[i] = contents[i].substring(0, contents[i].indexOf(".java"));
         }
-//        ListView<String> list = new ListView<>();
-//        ObservableList<String> items = FXCollections.observableArrayList (contents);
-//        list.setItems(items);
-//        list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//        listView.getItems().add(String.valueOf(list));
         listView.getItems().addAll(contents);
     }
-
-
 
     //This will take the tests that are selected and place them into the text box
     public void testselect(){
@@ -66,22 +62,23 @@ public class TestGUIController implements Initializable{
         }
     }
 
-    public void RunButtonSelected(){
-//        String[] selectedtest = new String[listView.getSelectionModel().getSelectedItems().size()];
+    public void RunButtonSelected() throws IOException {
         String [] selectedTest = searchBar.getText().split(" ");
         for(int i = 0; i<selectedTest.length; i++){
             selectedTest[i] = "test." + selectedTest[i];
         }
+        GUITestListener guiTestListener = new GUITestListener(this);
+        addListener(guiTestListener);
         runTests(selectedTest);
     }
 
     public void printToScreen(String text){
         runningTests.appendText(text);
-
     }
 
-    public void setListener(GUITestListener listener){
-        this.listener = listener;
+    //get the textarea
+    public TextArea getTextArea(){
+        return runningTests;
     }
 
 }

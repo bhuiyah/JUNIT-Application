@@ -4,9 +4,11 @@ import assignment4.annotations.Parameters;
 import assignment4.annotations.Test;
 import assignment4.annotations.UseParameters;
 import assignment4.assertions.AssertionException;
+import assignment4.listeners.GUITestListener;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,8 +16,8 @@ import java.util.Collections;
 
 public class ParameterizedTestRunner extends TestRunner {
 
-    public ParameterizedTestRunner(Class testClass) {
-        super(testClass);
+    public ParameterizedTestRunner(Class testClass, GUITestListener gui) throws IOException {
+        super(testClass, gui);
     }
 
     public TestClassResult runParameterized() throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException {

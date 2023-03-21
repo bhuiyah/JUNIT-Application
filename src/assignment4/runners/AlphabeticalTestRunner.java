@@ -1,20 +1,19 @@
 package assignment4.runners;
 
 import assignment4.annotations.Test;
-import assignment4.assertions.Assert;
 import assignment4.assertions.AssertionException;
-import assignment4.listeners.TestListener;
+import assignment4.listeners.GUITestListener;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collections;
 
 public class AlphabeticalTestRunner extends TestRunner {
 
-    public AlphabeticalTestRunner(Class testClass) throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        super(testClass);
+    public AlphabeticalTestRunner(Class testClass, GUITestListener gui) throws InvocationTargetException, InstantiationException, IllegalAccessException, IOException {
+        super(testClass, gui);
     }
 
     public TestClassResult runAlphabetical() throws InstantiationException, IllegalAccessException, InvocationTargetException, AssertionException {

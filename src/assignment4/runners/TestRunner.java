@@ -1,16 +1,11 @@
 package assignment4.runners;
 
 import assignment4.annotations.Test;
-import assignment4.assertions.Assert;
 import assignment4.assertions.AssertionException;
-import assignment4.gui.TestGUIController;
 import assignment4.listeners.GUITestListener;
 import assignment4.listeners.TestListener;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
-import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -18,17 +13,18 @@ import java.lang.reflect.Method;
 
 public class TestRunner {
     Class<?> testClass;
+    GUITestListener gui;
 
-    public TestRunner(Class testClass) {
+    public TestRunner(Class testClass, GUITestListener gui) throws IOException {
         // TODO: complete this constructor
         this.testClass = testClass;
+        this.gui = gui;
     }
 
     public TestClassResult run() throws InstantiationException, IllegalAccessException, InvocationTargetException, AssertionException, IOException {
         // TODO: complete this method
         //We need to document results from all the methods
         TestClassResult classResult = new TestClassResult(testClass.getName());
-        GUITestListener gui = new GUITestListener();
         for(Method method: testClass.getDeclaredMethods()) {
             gui.testStarted(classResult.getTestClassName() + "." + method.getName());
             //we need to see if the method has the proper annotation; if so, run it.

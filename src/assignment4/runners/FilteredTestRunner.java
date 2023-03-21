@@ -2,9 +2,11 @@ package assignment4.runners;
 
 import assignment4.annotations.Test;
 import assignment4.assertions.AssertionException;
+import assignment4.listeners.GUITestListener;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -12,8 +14,8 @@ import java.util.List;
 public class FilteredTestRunner extends TestRunner {
 
     List<String> testMethods;
-    public FilteredTestRunner(Class testClass, List<String> testMethods) throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        super(testClass);
+    public FilteredTestRunner(Class testClass, List<String> testMethods, GUITestListener gui) throws InvocationTargetException, InstantiationException, IllegalAccessException, IOException {
+        super(testClass, gui);
         this.testMethods = testMethods;
     }
 

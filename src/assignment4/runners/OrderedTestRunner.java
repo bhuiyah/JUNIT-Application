@@ -1,22 +1,21 @@
 package assignment4.runners;
 
 import assignment4.annotations.Order;
-import assignment4.annotations.Ordered;
 import assignment4.annotations.Test;
 import assignment4.assertions.AssertionException;
+import assignment4.listeners.GUITestListener;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
-import java.util.ArrayList;
 
-import javax.lang.model.type.DeclaredType;
-import java.lang.reflect.AnnotatedType;
+import java.io.IOException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class OrderedTestRunner extends TestRunner {
 
-    public OrderedTestRunner(Class testClass) throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        super(testClass);
+    public OrderedTestRunner(Class testClass, GUITestListener gui) throws InvocationTargetException, InstantiationException, IllegalAccessException, IOException {
+        super(testClass, gui);
     }
 
     public TestClassResult runOrdered() throws InstantiationException, IllegalAccessException, InvocationTargetException, AssertionException {

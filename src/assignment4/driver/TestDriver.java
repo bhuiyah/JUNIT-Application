@@ -3,6 +3,8 @@ package assignment4.driver;
 import assignment4.annotations.Alphabetical;
 import assignment4.annotations.Ordered;
 import assignment4.annotations.Parameterized;
+import assignment4.listeners.GUITestListener;
+import assignment4.listeners.TestListener;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
 import assignment4.runners.*;
@@ -10,8 +12,13 @@ import assignment4.runners.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TestDriver {
+    static TestListener gui;
+    public static void addListener(TestListener listener) {
+        gui = listener;
+    }
 
     public static void runTests(String[] testClasses) {
         //start with having all the results for each class in an array for organization
@@ -37,10 +44,11 @@ public class TestDriver {
                 }
                 try {
                     Class<?> test = Class.forName(testName);
-                    FilteredTestRunner filteredTest = new FilteredTestRunner(test, filteredMethods);
+                    FilteredTestRunner filteredTest = new FilteredTestRunner(test, filteredMethods, (GUITestListener) gui);
                     results.add(filteredTest.runFiltered()) ;
                 }
-                catch(ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException ignored){
+                catch(ClassNotFoundException | InstantiationException | IllegalAccessException |
+                      InvocationTargetException | IOException ignored){
 
                 }
             }
@@ -48,17 +56,17 @@ public class TestDriver {
                 try {
                     Class<?> test = Class.forName(testClass);
                     if (test.isAnnotationPresent(Parameterized.class)) {
-                        ParameterizedTestRunner extraRunner = new ParameterizedTestRunner(test);
+                        ParameterizedTestRunner extraRunner = new ParameterizedTestRunner(test, (GUITestListener) gui);
                         results.add(extraRunner.runParameterized());
                     } else if (test.isAnnotationPresent(Alphabetical.class)) {
-                        AlphabeticalTestRunner runner1 = new AlphabeticalTestRunner(test);
+                        AlphabeticalTestRunner runner1 = new AlphabeticalTestRunner(test, (GUITestListener) gui);
                         results.add(runner1.runAlphabetical());
                     } else if (test.isAnnotationPresent(Ordered.class)) {
-                        OrderedTestRunner runner2 = new OrderedTestRunner(test);
+                        OrderedTestRunner runner2 = new OrderedTestRunner(test, (GUITestListener) gui);
                         results.add(runner2.runOrdered());
                     } else {
                         //running will do all the methods that have the appropriate annotations and print
-                        TestRunner runner = new TestRunner(test);
+                        TestRunner runner = new TestRunner(test, (GUITestListener) gui);
                         results.add(runner.run());
                     }
                     //proceed with the next class inputted
