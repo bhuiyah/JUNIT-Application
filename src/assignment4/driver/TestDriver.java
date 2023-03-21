@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestDriver {
-    static TestListener gui;
-    public static void addListener(TestListener listener) {
+    static GUITestListener gui;
+    public static void addListener(GUITestListener listener) {
         gui = listener;
     }
 
@@ -79,6 +79,7 @@ public class TestDriver {
             }
         }
         //after going through all the classes, we have to find which methods resulted in an error and print them
+        gui.printSum(results);
         System.out.println("==========");
         System.out.println("FAILURES:");
         int failures = 0;

@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 import assignment4.listeners.GUITestListener;
 import assignment4.listeners.PrintToScreen;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -41,6 +42,8 @@ public class TestGUIController implements Initializable{
     @FXML private Button RunButton;
     @FXML private TextArea runningTests;
     @FXML private Button RerunButton;
+
+    @FXML private Button StopButton;
     @Override
     public void initialize(URL url, ResourceBundle rb){
         File directory = new File("src/test/");
@@ -63,6 +66,7 @@ public class TestGUIController implements Initializable{
     }
 
     public void RunButtonSelected() throws IOException {
+        runningTests.clear();
         String [] selectedTest = searchBar.getText().split(" ");
         for(int i = 0; i<selectedTest.length; i++){
             selectedTest[i] = "test." + selectedTest[i];
@@ -70,6 +74,27 @@ public class TestGUIController implements Initializable{
         GUITestListener guiTestListener = new GUITestListener(this);
         addListener(guiTestListener);
         runTests(selectedTest);
+    }
+
+    public void ReRunButtonSelected() throws IOException {
+        runningTests.clear();
+        String [] selectedTest = searchBar.getText().split(" ");
+        for(int i = 0; i<selectedTest.length; i++){
+            selectedTest[i] = "test." + selectedTest[i];
+        }
+        GUITestListener guiTestListener = new GUITestListener(this);
+        addListener(guiTestListener);
+        runTests(selectedTest);
+    }
+
+    public void ResetButtonSelected() throws IOException {
+        searchBar.clear();
+        runningTests.clear();
+    }
+
+    public void StopButtonSelected() throws IOException {
+        Stage stage = (Stage) StopButton.getScene().getWindow();
+        stage.close();
     }
 
     public void printToScreen(String text){
