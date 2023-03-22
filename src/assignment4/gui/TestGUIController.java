@@ -56,6 +56,7 @@ public class TestGUIController implements Initializable{
         String [] contents = directory.list();
         listView.getItems().addAll(contents);
         listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        printInstructions();
     }
 
     //This will take the tests that are selected and place them into the text box
@@ -147,6 +148,7 @@ public class TestGUIController implements Initializable{
         listView.getItems().addAll(contents);
         searchBar.clear();
         runningTests.clear();
+        printInstructions();
     }
 
     public void StopButtonSelected() throws IOException {
@@ -159,4 +161,9 @@ public class TestGUIController implements Initializable{
         return runningTests;
     }
 
+    public void printInstructions() {
+        runningTests.setText("Instructions:\n\nSpecify the class path by clicking through the directories\n\nThe tests can be found in test directory\n\n");
+        runningTests.appendText("To delete a test, just remove the test from the search bar\nbelow using your keyboard\n\n");
+        runningTests.appendText("Run: Runs the selected tests\n\nRerun: Reruns the selected tests\n\nReset: Clears the previous test summary\n\nStop: Closes the gui");
+    }
 }
