@@ -17,7 +17,6 @@ public class TestGUI extends Application {
         // TODO: Implement this method
         loader = new FXMLLoader(getClass().getResource("../gui/TestGUI.fxml"));
         root = loader.load();
-        controller = loader.getController();
         applicationStage.setScene(new Scene(root));
         applicationStage.setTitle("JUNIT Application");
         applicationStage.show();

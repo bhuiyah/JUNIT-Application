@@ -26,9 +26,9 @@ public class TestRunner {
         //We need to document results from all the methods
         TestClassResult classResult = new TestClassResult(testClass.getName());
         for(Method method: testClass.getDeclaredMethods()) {
-            gui.testStarted("Starting " + classResult.getTestClassName() + "." + method.getName() + " : ");
             //we need to see if the method has the proper annotation; if so, run it.
             if (method.isAnnotationPresent(Test.class)) {
+                gui.testStarted("Starting " + classResult.getTestClassName() + "." + method.getName() + " : ");
                 //everytime we have a correct annotation, we need to create a new object of the class and the run the method
                 Object obj = testClass.newInstance();
                 TestMethodResult methodResult;
