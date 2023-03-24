@@ -204,8 +204,13 @@ public class TestGUIController implements Initializable{
                     testmethods.getItems().add(methods.getName());
                 }
             }
+            System.out.println("Class found");
+            System.out.println(classpath);
+            System.out.println(path);
         }catch(ClassNotFoundException ce){
             System.out.println("Class not found");
+            System.out.println(classpath);
+            System.out.println(path);
         }
         return count;
     }
