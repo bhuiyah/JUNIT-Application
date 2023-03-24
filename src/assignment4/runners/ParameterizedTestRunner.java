@@ -41,7 +41,7 @@ public class ParameterizedTestRunner extends TestRunner {
                 TestMethodResult methodResult = null;
                 for (int i = 0; i < Array.getLength(parameters); i++) {
                     Object p = Array.get(parameters, i);
-                    gui.testStarted("Starting " + classResult.getTestClassName() + "." + method.getName() + "[" + p + "] : ");
+                    gui.testStarted(classResult.getTestClassName() + "." + method.getName() + "[" + p + "] : ");
                     try {
                         method.invoke(obj, p);
                         methodResult = new TestMethodResult(method.getName(), true, null);

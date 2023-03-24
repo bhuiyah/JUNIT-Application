@@ -1,10 +1,13 @@
 package assignment4.listeners;
 
+import assignment4.gui.TestGUI;
 import assignment4.gui.TestGUIController;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 
 //import javax.xml.soap.Text;
 import java.io.IOException;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 
+import static assignment4.gui.TestGUI.scene;
 public class GUITestListener implements TestListener {
     FXMLLoader loader;
     Parent root;
@@ -28,27 +32,40 @@ public class GUITestListener implements TestListener {
     @Override
     public void testStarted(String testMethod) {
         //print the testMethod to the TextArea in the GUI
-        controller.getTextArea().appendText(testMethod);
-
+        controller.getTextArea().getChildren().add(new Text("Starting: \n"));
+        update_display();
+        controller.getTextArea().getChildren().add(new Text(testMethod));
+        update_display();
     }
 
     // Call this method right after the test method finished running successfully
     @Override
     public void testSucceeded(TestMethodResult testMethodResult) {
         //print to the TextArea in the GUI that the test passed
-        controller.getTextArea().appendText("PASS\n");
+        Text pass = new Text("PASS\n");
+        pass.setFill(Color.GREEN);
+        //set the font to courier new
+        pass.setStyle("-fx-font-family: courier new;");
+        controller.getTextArea().getChildren().add(pass);
+        update_display();
     }
 
     // Call this method right after the test method finished running and failed
     @Override
     public void testFailed(TestMethodResult testMethodResult) {
         //print to the TextArea in the GUI that the test failed
-        controller.getTextArea().appendText("FAIL\n");
+        Text fail = new Text("FAIL\n");
+        fail.setStyle("-fx-font-family: courier new;");
+        fail.setFill(Color.RED);
+        controller.getTextArea().getChildren().add(fail);
+        update_display();
     }
 
     public void printSum(ArrayList<TestClassResult> results){
-        controller.getTextArea().appendText("----------------------------------------\n");
-        controller.getTextArea().appendText("FAILURES:\n");
+        controller.getTextArea().getChildren().add(new Text ("----------------------------------------\n"));
+        update_display();
+        controller.getTextArea().getChildren().add(new Text ("FAILURES:\n"));
+        update_display();
         int failures = 0;
         int tests = 0;
         for(TestClassResult result : results){
@@ -56,17 +73,28 @@ public class GUITestListener implements TestListener {
                 tests++;
                 if(!method.isPass()){
                     failures++;
-                    controller.getTextArea().appendText(result.getTestClassName() + "." + method.getName() + ":\n");
+                    controller.getTextArea().getChildren().add(new Text(result.getTestClassName() + "." + method.getName() + ":\n"));
+                    update_display();
                     //printStackTrace was recommended to us
                     StringWriter sw = new StringWriter();
                     method.getException().printStackTrace(new PrintWriter(sw));
-                    controller.getTextArea().appendText(sw.toString());
+                    controller.getTextArea().getChildren().add(new Text(sw.toString()));
+                    update_display();
                 }
             }
         }
-        controller.getTextArea().appendText("----------------------------------------\n");
-        controller.getTextArea().appendText("Tests run: " + tests + ", Failures: " + failures + "\n");
-        controller.getTextArea().appendText("========================================\n");
+        controller.getTextArea().getChildren().add(new Text("----------------------------------------\n"));
+
+        controller.getTextArea().getChildren().add(new Text("Tests run: " + tests + ", Failures: " + failures + "\n"));
+        update_display();
+        controller.getTextArea().getChildren().add(new Text("========================================\n"));
+        update_display();
         // We will call this method from our JUnit test cases.
+
+    }
+
+    public void update_display(){
+        TestGUIController.delay();
+        controller.getScrollPane().setVvalue(1.0);
     }
 }

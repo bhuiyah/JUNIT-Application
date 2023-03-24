@@ -45,7 +45,7 @@ public class FilteredTestRunner extends TestRunner {
                 TestMethodResult methodResult = null;
                 for (int i = 0; i < Array.getLength(parameters); i++) {
                     Object p = Array.get(parameters, i);
-                    gui.testStarted("Starting " + classResult.getTestClassName() + "." + method.getName() + "[" + p + "] : ");
+                    gui.testStarted(classResult.getTestClassName() + "." + method.getName() + "[" + p + "] : ");
                     try {
                         method.invoke(obj, p);
                         methodResult = new TestMethodResult(method.getName(), true, null);
@@ -62,7 +62,7 @@ public class FilteredTestRunner extends TestRunner {
                 }
             }
                 else if (method.isAnnotationPresent(Test.class) && testMethods.contains(method.getName())) {
-                    gui.testStarted("Starting " + classResult.getTestClassName() + "." + method.getName() + " : ");
+                    gui.testStarted(classResult.getTestClassName() + "." + method.getName() + " : ");
                     //everytime we have a correct annotation, we need to create a new object of the class and the run the method
                 Object obj = testClass.newInstance();
                 TestMethodResult methodResult;

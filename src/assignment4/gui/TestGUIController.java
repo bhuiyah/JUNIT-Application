@@ -28,10 +28,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.beans.value.ObservableValue;
+import javafx.stage.StageStyle;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -46,10 +50,11 @@ public class TestGUIController implements Initializable{
     @FXML private ListView<String> listView;
     @FXML private TextField searchBar;
     @FXML private Button RunButton;
-    @FXML private TextArea runningTests;
+    @FXML private TextFlow runningTests;
     @FXML private Button RerunButton;
     @FXML private Button StopButton;
     @FXML private ListView testmethods;
+    @FXML private ScrollPane scrollpane;
 
     String classpath;
     String path;
@@ -58,7 +63,8 @@ public class TestGUIController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb){
         String userDirectory = System.getProperty("user.dir");
-        classpath = userDirectory.replaceAll("\\\\", "/");//.substring(userDirectory.lastIndexOf("/"), userDirectory.length());
+        classpath = userDirectory.replaceAll("\\\\", "/");
+        //.substring(userDirectory.lastIndexOf("/"), userDirectory.length());
 //        classpath = classpath.substring(classpath.lastIndexOf("/"));
         path = "";
         File directory = new File(classpath);
@@ -232,7 +238,7 @@ public class TestGUIController implements Initializable{
              }
      }
     public void RunButtonSelected() throws IOException {
-        runningTests.clear();
+        runningTests.getChildren().clear();
         String [] selectedTest = searchBar.getText().split(" ");
         GUITestListener guiTestListener = new GUITestListener(this);
         addListener(guiTestListener);
@@ -240,7 +246,7 @@ public class TestGUIController implements Initializable{
     }
 
     public void ReRunButtonSelected() throws IOException {
-        runningTests.clear();
+        runningTests.getChildren().clear();
         String [] selectedTest = searchBar.getText().split(" ");
         GUITestListener guiTestListener = new GUITestListener(this);
         addListener(guiTestListener);
@@ -259,7 +265,7 @@ public class TestGUIController implements Initializable{
         String [] contents = directory.list();
         listView.getItems().addAll(contents);
         searchBar.clear();
-        runningTests.clear();
+        runningTests.getChildren().clear();
         printInstructions();
     }
 
@@ -269,14 +275,37 @@ public class TestGUIController implements Initializable{
     }
 
     //get the textarea
-    public TextArea getTextArea(){
+    public TextFlow getTextArea(){
         return runningTests;
     }
 
-    public void printInstructions() {
-        runningTests.setText("Instructions:\n\nSpecify the class path by clicking through the directories\n\nThe tests can be found in test directory\n\n");
-        runningTests.appendText("To delete a test, just remove the test from the search bar\nbelow using your keyboard\n\n");
-        runningTests.appendText("Run: Runs the selected tests\n\nRerun: Reruns the selected tests\n\nReset: Clears the previous test summary\n\nStop: Closes the gui");
+    //get scrollpane
+    public ScrollPane getScrollPane(){
+        return scrollpane;
     }
 
+    public void printInstructions() {
+        runningTests.getChildren().add(new Text("Instructions:\n\n Specify the class path by clicking through the directories\n\nThe tests can be found in test directory "));
+        delay();
+        runningTests.getChildren().add(new Text("To delete a test, just remove the test from the search bar \nbelow using your keyboard\n\n"));
+        delay();
+        runningTests.getChildren().add(new Text("Run: Runs the selected tests\n\n"));
+        delay();
+        runningTests.getChildren().add(new Text("Rerun: Reruns the selected tests\n\n"));
+        delay();
+        runningTests.getChildren().add(new Text("Reset: Clears the previous test summary\n\n"));
+        delay();
+        runningTests.getChildren().add(new Text("Stop: Closes the gui\n\n"));
+    }
+
+    public static void delay(){
+        Stage stage = new Stage(StageStyle.TRANSPARENT);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                stage.close();
+            }
+        });
+        stage.showAndWait();
+    }
 }

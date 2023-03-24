@@ -11,13 +11,16 @@ public class TestGUI extends Application {
 
     static Parent root;
     static FXMLLoader loader;
+
+    public static Scene scene;
     static TestGUIController controller;
     @Override
     public void start(Stage applicationStage) throws Exception{
         // TODO: Implement this method
         loader = new FXMLLoader(getClass().getResource("../gui/TestGUI.fxml"));
         root = loader.load();
-        applicationStage.setScene(new Scene(root));
+        scene = new Scene(root);
+        applicationStage.setScene(scene);
         applicationStage.setTitle("JUNIT Application");
         applicationStage.show();
     }
