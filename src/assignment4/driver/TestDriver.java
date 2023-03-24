@@ -48,7 +48,7 @@ public class TestDriver {
                     results.add(filteredTest.runFiltered()) ;
                 }
                 catch(ClassNotFoundException | InstantiationException | IllegalAccessException |
-                      InvocationTargetException | IOException ignored){
+                      InvocationTargetException | IOException ignored) {
 
                 }
             }
@@ -99,7 +99,6 @@ public class TestDriver {
         System.out.println("Tests run: " + tests + ", Failures: " + failures);
         // We will call this method from our JUnit test cases.
     }
-
 //    public static void main(String[] args){
 //        // Use this for your testing.  We will not be calling this method.
 //        //only method we need in main

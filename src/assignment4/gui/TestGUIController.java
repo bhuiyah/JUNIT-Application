@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import assignment4.annotations.Test;
 import assignment4.listeners.GUITestListener;
 import assignment4.listeners.PrintToScreen;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
@@ -159,7 +160,7 @@ public class TestGUIController implements Initializable{
         try {
             Class<?> tc = Class.forName(path);
             for(Method methods : tc.getDeclaredMethods()){
-                if(!methods.getName().contains("parameter")) {
+                if(!methods.getName().contains("parameter") && methods.isAnnotationPresent(Test.class)) {
                     testmethods.getItems().add(methods.getName());
                 }
             }
