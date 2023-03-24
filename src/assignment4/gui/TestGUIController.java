@@ -119,32 +119,42 @@ public class TestGUIController implements Initializable{
             else{
                 //Test class was selected, now place it in the search bar
                 if(searchBar.getText().equals("")){
-                    updatemethods();
-                    searchBar.setText(path);
-                    String temp = "";
-                    temp += path;
-                    current_Path = temp;
-                    path = path.substring(0, path.lastIndexOf("."));
-                    classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                    if(updatemethods() != 0){
+                        searchBar.setText(path);
+                        String temp = "";
+                        temp += path;
+                        current_Path = temp;
+                        path = path.substring(0, path.lastIndexOf("."));
+                        classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                    }
+                    else{
+                        path = path.substring(0, path.lastIndexOf("."));
+                        classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                    }
                 }
                 else {
-                    updatemethods();
-                    if(searchBar.getText().contains(path)) {
-                        String tmp = searchBar.getText().substring(searchBar.getText().indexOf(path));
-                        if(tmp.contains("#")) {
-                            tmp = tmp.substring(0, tmp.indexOf("#"));
-                        }
-                        if (!tmp.equals(path)) {
+                    if(updatemethods() != 0){
+                        if(searchBar.getText().contains(path)) {
+                            String tmp = searchBar.getText().substring(searchBar.getText().indexOf(path));
+                            if(tmp.contains("#")) {
+                                tmp = tmp.substring(0, tmp.indexOf("#"));
+                            }
+                            if (!tmp.equals(path)) {
+                                searchBar.setText(searchBar.getText() + " " + path);
+                            }
+                        }else{
                             searchBar.setText(searchBar.getText() + " " + path);
                         }
-                    }else{
-                        searchBar.setText(searchBar.getText() + " " + path);
+                        String temp = "";
+                        temp += path;
+                        current_Path = temp;
+                        path = path.substring(0, path.lastIndexOf("."));
+                        classpath = classpath.substring(0, classpath.lastIndexOf("/"));
                     }
-                    String temp = "";
-                    temp += path;
-                    current_Path = temp;
-                    path = path.substring(0, path.lastIndexOf("."));
-                    classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                    else{
+                        path = path.substring(0, path.lastIndexOf("."));
+                        classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                    }
                 }
             }
         }
@@ -155,18 +165,22 @@ public class TestGUIController implements Initializable{
         When a new class is selected, update the test methods listview
         to show that class's methods
      */
-    public void updatemethods(){
+    public int updatemethods(){
         testmethods.getItems().clear();
+        int count = 0;
         try {
             Class<?> tc = Class.forName(path);
+
             for(Method methods : tc.getDeclaredMethods()){
                 if(!methods.getName().contains("parameter") && methods.isAnnotationPresent(Test.class)) {
+                    count++;
                     testmethods.getItems().add(methods.getName());
                 }
             }
         }catch(ClassNotFoundException ce){
             System.out.println("Class not found");
         }
+        return count;
     }
      public void selectmethod(){
          method = (String) testmethods.getSelectionModel().getSelectedItem();
