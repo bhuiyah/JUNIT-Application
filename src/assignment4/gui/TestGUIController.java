@@ -28,6 +28,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -285,9 +287,9 @@ public class TestGUIController implements Initializable{
     }
 
     public void printInstructions() {
-        runningTests.getChildren().add(new Text("Instructions:\n\n Specify the class path by clicking through the directories\n\nThe tests can be found in test directory "));
+        runningTests.getChildren().add(new Text("Instructions:\n\nSpecify the class path by clicking through the directories\n\nThe tests can be found in test directory "));
         delay();
-        runningTests.getChildren().add(new Text("To delete a test, just remove the test from the search bar \nbelow using your keyboard\n\n"));
+        runningTests.getChildren().add(new Text("To delete a test, just remove the test from the search bar below using your keyboard\n\n"));
         delay();
         runningTests.getChildren().add(new Text("Run: Runs the selected tests\n\n"));
         delay();

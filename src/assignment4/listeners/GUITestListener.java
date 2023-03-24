@@ -44,8 +44,8 @@ public class GUITestListener implements TestListener {
         //print to the TextArea in the GUI that the test passed
         Text pass = new Text("PASS\n");
         pass.setFill(Color.GREEN);
-        //set the font to courier new
-        pass.setStyle("-fx-font-family: courier new;");
+        //set the font to bold
+        pass.setStyle("-fx-font-weight: bold;");
         controller.getTextArea().getChildren().add(pass);
         update_display();
     }
@@ -55,14 +55,14 @@ public class GUITestListener implements TestListener {
     public void testFailed(TestMethodResult testMethodResult) {
         //print to the TextArea in the GUI that the test failed
         Text fail = new Text("FAIL\n");
-        fail.setStyle("-fx-font-family: courier new;");
+        fail.setStyle("-fx-font-weight: bold;");
         fail.setFill(Color.RED);
         controller.getTextArea().getChildren().add(fail);
         update_display();
     }
 
     public void printSum(ArrayList<TestClassResult> results){
-        controller.getTextArea().getChildren().add(new Text ("----------------------------------------\n"));
+        controller.getTextArea().getChildren().add(new Text ("--------------------------------------------------------------------------------\n"));
         update_display();
         controller.getTextArea().getChildren().add(new Text ("FAILURES:\n"));
         update_display();
@@ -83,11 +83,11 @@ public class GUITestListener implements TestListener {
                 }
             }
         }
-        controller.getTextArea().getChildren().add(new Text("----------------------------------------\n"));
+        controller.getTextArea().getChildren().add(new Text("--------------------------------------------------------------------------------\n"));
 
         controller.getTextArea().getChildren().add(new Text("Tests run: " + tests + ", Failures: " + failures + "\n"));
         update_display();
-        controller.getTextArea().getChildren().add(new Text("========================================\n"));
+        controller.getTextArea().getChildren().add(new Text("===============================================\n"));
         update_display();
         // We will call this method from our JUnit test cases.
 
