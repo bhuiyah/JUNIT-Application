@@ -44,7 +44,7 @@
                         </StackPane>
                      </children>
                   </HBox>
-                  <TextArea fx:id="runningTests" prefHeight="400.0" prefWidth="144.0" style="-fx-font-size: 13.5; -fx-font-weight: Bold; -fx-font-family: monospace; -fx-font-style: italic" />
+                  <TextArea fx:id="runningTests" prefHeight="400.0" prefWidth="144.0" style="-fx-font-size: 11.75; -fx-font-weight: Bold; -fx-font-family: monospace; -fx-font-style: italic;" text="Instructions:&#10;&#10;Specify the class path by clicking through the directories&#10;&#10;The tests can be found in test directory&#10;&#10;To delete a test, just remove the test from the search bar&#10;below using your keyboard&#10;&#10;Run: Runs the selected tests&#10;&#10;Rerun: Reruns the selected tests&#10;&#10;Reset: Clears the previous test summary&#10;&#10;Stop: Closes the gui" />
                </children>
             </VBox>
          </children>

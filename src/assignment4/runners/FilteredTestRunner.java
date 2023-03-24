@@ -7,7 +7,6 @@ import assignment4.assertions.AssertionException;
 import assignment4.listeners.GUITestListener;
 import assignment4.results.TestClassResult;
 import assignment4.results.TestMethodResult;
-import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.lang.reflect.Array;

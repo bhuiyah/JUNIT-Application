@@ -184,7 +184,6 @@ public class TestGUIController implements Initializable{
     }
      public void selectmethod(){
          method = (String) testmethods.getSelectionModel().getSelectedItem();
-         if(!searchBar.getText().contains(method)) {
              if (searchBar.getText().contains(current_Path)) {
                  if (current_Path.contains("#")) {
                      searchBar.setText(searchBar.getText().replace(current_Path, current_Path + "," + method));
@@ -212,7 +211,6 @@ public class TestGUIController implements Initializable{
              } else {
                  searchBar.setText(searchBar.getText() + " " + current_Path + "#" + method);
              }
-         }
      }
     public void RunButtonSelected() throws IOException {
         runningTests.clear();
