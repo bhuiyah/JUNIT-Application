@@ -32,6 +32,8 @@ import javafx.stage.Stage;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.beans.value.ObservableValue;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -55,9 +57,11 @@ public class TestGUIController implements Initializable{
     String current_Path;
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        classpath = "src";
+        String userDirectory = System.getProperty("user.dir");
+        classpath = userDirectory.replaceAll("\\\\", "/");//.substring(userDirectory.lastIndexOf("/"), userDirectory.length());
+//        classpath = classpath.substring(classpath.lastIndexOf("/"));
         path = "";
-        File directory = new File("src/");
+        File directory = new File(classpath);
         System.out.println(directory.isDirectory());
         String [] contents = directory.list();
         listView.getItems().addAll(contents);
@@ -120,6 +124,11 @@ public class TestGUIController implements Initializable{
                 //Test class was selected, now place it in the search bar
                 if(searchBar.getText().equals("")){
                     if(updatemethods() != 0){
+                        if(path.contains("src.")){
+                            StringBuilder sb = new StringBuilder(path);
+                            sb = sb.replace(path.indexOf("src."), path.indexOf("src.") + 4, "");
+                            path = sb.toString();
+                        }
                         searchBar.setText(path);
                         String temp = "";
                         temp += path;
@@ -134,6 +143,11 @@ public class TestGUIController implements Initializable{
                 }
                 else {
                     if(updatemethods() != 0){
+                        if(path.contains("src.")){
+                            StringBuilder sb = new StringBuilder(path);
+                            sb = sb.replace(path.indexOf("src."), path.indexOf("src.") + 4, "");
+                            path = sb.toString();
+                        }
                         if(searchBar.getText().contains(path)) {
                             String tmp = searchBar.getText().substring(searchBar.getText().indexOf(path));
                             if(tmp.contains("#")) {
@@ -169,6 +183,11 @@ public class TestGUIController implements Initializable{
         testmethods.getItems().clear();
         int count = 0;
         try {
+            if(path.contains("src.")){
+                StringBuilder sb = new StringBuilder(path);
+                sb = sb.replace(path.indexOf("src."), path.indexOf("src.") + 4, "");
+                path = sb.toString();
+            }
             Class<?> tc = Class.forName(path);
 
             for(Method methods : tc.getDeclaredMethods()){
@@ -233,9 +252,10 @@ public class TestGUIController implements Initializable{
         //clear the listview
         listView.getItems().clear();
         testmethods.getItems().clear();
-        classpath = "src";
+        String userDirectory = System.getProperty("user.dir");
+        classpath = userDirectory.replaceAll("\\\\", "/");
         path = "";
-        File directory = new File("src/");
+        File directory = new File(classpath);
         String [] contents = directory.list();
         listView.getItems().addAll(contents);
         searchBar.clear();
