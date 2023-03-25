@@ -79,108 +79,105 @@ public class TestGUIController implements Initializable{
     }
 
     //This will take the tests that are selected and place them into the text box
-    public void testselect(){
-        //The user wants to go back to the parent directory
-        if(listView.getSelectionModel().getSelectedItem().equals("..")){
-            testmethods.getItems().clear();
-            String [] pathArray = path.split("\\.");
-            path = "";
-            for(int i = 0; i < pathArray.length - 1; i++){
-                if(i == 0){
-                    path += pathArray[i];
-                }
-                else{
-                    path += "." + pathArray[i];
-                }
-            }
-            classpath = classpath.substring(0, classpath.lastIndexOf("/"));
-            File classpathFile = new File(classpath);
-            classpathFile = new File(classpathFile.getPath());
-            String [] contents = classpathFile.list();
-            listView.getItems().clear();
-            if(classpathFile.getPath().equals("src")){
-                listView.getItems().addAll(contents);
-            }
-            else{
-                listView.getItems().add("..");
-                listView.getItems().addAll(contents);
-            }
-        }
-        else{
-            //See the directories contents
-            if(Objects.equals(path, "")){
-                path += listView.getSelectionModel().getSelectedItem();
-            }
-            else{
-                path += "." + listView.getSelectionModel().getSelectedItem();
-            }
-            classpath += "/" + listView.getSelectionModel().getSelectedItem();
-            File classpathFile = new File(classpath);
-            classpathFile = new File(classpathFile.getPath());
-            if(classpathFile.isDirectory()){
-                String [] contents = classpathFile.list();
-                listView.getItems().clear();
-                listView.getItems().add("..");
-                for(int i = 0; i < contents.length; i++){
-                    if(!new File(classpath + "/" + contents[i]).isDirectory()){
-                        contents[i] = contents[i].substring(0, contents[i].lastIndexOf("."));
-                    }
-                }
-                listView.getItems().addAll(contents);
-            }
-            else{
-                //Test class was selected, now place it in the search bar
-                if(searchBar.getText().equals("")){
-                    if(updatemethods() != 0){
-                        if(path.contains("src.")){
-                            StringBuilder sb = new StringBuilder(path);
-                            sb = sb.replace(path.indexOf("src."), path.indexOf("src.") + 4, "");
-                            path = sb.toString();
+    public void testselect() {
+        try {
+            //The user wants to go back to the parent directory
+            if (!listView.getSelectionModel().getSelectedItem().equals(null)) {
+                if (listView.getSelectionModel().getSelectedItem().equals("..")) {
+                    testmethods.getItems().clear();
+                    String[] pathArray = path.split("\\.");
+                    path = "";
+                    for (int i = 0; i < pathArray.length - 1; i++) {
+                        if (i == 0) {
+                            path += pathArray[i];
+                        } else {
+                            path += "." + pathArray[i];
                         }
-                        searchBar.setText(path);
-                        String temp = "";
-                        temp += path;
-                        current_Path = temp;
-                        path = path.substring(0, path.lastIndexOf("."));
-                        classpath = classpath.substring(0, classpath.lastIndexOf("/"));
                     }
-                    else{
-                        path = path.substring(0, path.lastIndexOf("."));
-                        classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                    classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                    File classpathFile = new File(classpath);
+                    classpathFile = new File(classpathFile.getPath());
+                    String[] contents = classpathFile.list();
+                    listView.getItems().clear();
+                    if (classpathFile.getPath().equals("src")) {
+                        listView.getItems().addAll(contents);
+                    } else {
+                        listView.getItems().add("..");
+                        listView.getItems().addAll(contents);
                     }
-                }
-                else {
-                    if(updatemethods() != 0){
-                        if(path.contains("src.")){
-                            StringBuilder sb = new StringBuilder(path);
-                            sb = sb.replace(path.indexOf("src."), path.indexOf("src.") + 4, "");
-                            path = sb.toString();
-                        }
-                        if(searchBar.getText().contains(path)) {
-                            String tmp = searchBar.getText().substring(searchBar.getText().indexOf(path));
-                            if(tmp.contains("#")) {
-                                tmp = tmp.substring(0, tmp.indexOf("#"));
+                } else {
+                    //See the directories contents
+                    if (Objects.equals(path, "")) {
+                        path += listView.getSelectionModel().getSelectedItem();
+                    } else {
+                        path += "." + listView.getSelectionModel().getSelectedItem();
+                    }
+                    classpath += "/" + listView.getSelectionModel().getSelectedItem();
+                    File classpathFile = new File(classpath);
+                    classpathFile = new File(classpathFile.getPath());
+                    if (classpathFile.isDirectory()) {
+                        String[] contents = classpathFile.list();
+                        listView.getItems().clear();
+                        listView.getItems().add("..");
+                        for (int i = 0; i < contents.length; i++) {
+                            if (!new File(classpath + "/" + contents[i]).isDirectory()) {
+                                contents[i] = contents[i].substring(0, contents[i].lastIndexOf("."));
                             }
-                            if (!tmp.equals(path)) {
-                                searchBar.setText(searchBar.getText() + " " + path);
-                            }
-                        }else{
-                            searchBar.setText(searchBar.getText() + " " + path);
                         }
-                        String temp = "";
-                        temp += path;
-                        current_Path = temp;
-                        path = path.substring(0, path.lastIndexOf("."));
-                        classpath = classpath.substring(0, classpath.lastIndexOf("/"));
-                    }
-                    else{
-                        path = path.substring(0, path.lastIndexOf("."));
-                        classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                        listView.getItems().addAll(contents);
+                    } else {
+                        //Test class was selected, now place it in the search bar
+                        if (searchBar.getText().equals("")) {
+                            if (updatemethods() != 0) {
+                                if (path.contains("src.")) {
+                                    StringBuilder sb = new StringBuilder(path);
+                                    sb = sb.replace(path.indexOf("src."), path.indexOf("src.") + 4, "");
+                                    path = sb.toString();
+                                }
+                                searchBar.setText(path);
+                                String temp = "";
+                                temp += path;
+                                current_Path = temp;
+                                path = path.substring(0, path.lastIndexOf("."));
+                                classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                            } else {
+                                path = path.substring(0, path.lastIndexOf("."));
+                                classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                            }
+                        } else {
+                            if (updatemethods() != 0) {
+                                if (path.contains("src.")) {
+                                    StringBuilder sb = new StringBuilder(path);
+                                    sb = sb.replace(path.indexOf("src."), path.indexOf("src.") + 4, "");
+                                    path = sb.toString();
+                                }
+                                if (searchBar.getText().contains(path)) {
+                                    String tmp = searchBar.getText().substring(searchBar.getText().indexOf(path));
+                                    if (tmp.contains("#")) {
+                                        tmp = tmp.substring(0, tmp.indexOf("#"));
+                                    }
+                                    if (!tmp.equals(path)) {
+                                        searchBar.setText(searchBar.getText() + " " + path);
+                                    }
+                                } else {
+                                    searchBar.setText(searchBar.getText() + " " + path);
+                                }
+                                String temp = "";
+                                temp += path;
+                                current_Path = temp;
+                                path = path.substring(0, path.lastIndexOf("."));
+                                classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                            } else {
+                                path = path.substring(0, path.lastIndexOf("."));
+                                classpath = classpath.substring(0, classpath.lastIndexOf("/"));
+                            }
+                        }
                     }
                 }
             }
+        } catch (NullPointerException e) {
+            System.out.println("Nothing selected");
         }
-
     }
 
     /*
@@ -214,35 +211,42 @@ public class TestGUIController implements Initializable{
         }
         return count;
     }
-     public void selectmethod(){
-         method = (String) testmethods.getSelectionModel().getSelectedItem();
-             if (searchBar.getText().contains(current_Path)) {
-                 if (current_Path.contains("#")) {
-                     searchBar.setText(searchBar.getText().replace(current_Path, current_Path + "," + method));
-                 } else {
-                     current_Path += "#";
-                     String [] t = searchBar.getText().split(" ");
-                     for(int i = 0; i < t.length; i++){
-                         if(t[i].contains("#")) {
-                             if (t[i].substring(0, t[i].indexOf("#")).equals(current_Path.substring(0, current_Path.indexOf("#")))) {
-                                 t[i] += "," + method;
-                                 current_Path = t[i];
+     public void selectmethod() {
+         try {
+             if (!testmethods.getSelectionModel().getSelectedItem().equals(null)) {
+                 method = (String) testmethods.getSelectionModel().getSelectedItem();
+                 String[] classes = searchBar.getText().split(" ");
+                 for (int i = 0; i < classes.length; i++) {
+                     if (classes[i].contains("#")) { //If the class has methods selected then see if the method is already selected
+                         if (!current_Path.contains("#")) {
+                             current_Path += "#";
+                         }
+                         if (classes[i].substring(0, classes[i].indexOf("#")).equals(current_Path.substring(0, current_Path.indexOf("#")))) {
+                             String temp = classes[i].substring(classes[i].indexOf("#") + 1); //Only looking at the methods
+                             String[] methods = temp.split(",");
+                             for (int j = 0; j < methods.length; j++) {
+                                 if (methods[j].equals(method)) {
+                                     current_Path = classes[i].substring(0, classes[i].indexOf("#") + 1) + temp; //ensures that the current path is correct
+                                     return;
+                                 }
                              }
-                         }else if(t[i].equals(current_Path.substring(0, current_Path.indexOf("#")))){
-                             t[i] = current_Path + method;
-                             current_Path = t[i];
+                             current_Path = classes[i].substring(0, classes[i].indexOf("#") + 1) + temp + "," + method;
+                             searchBar.setText(searchBar.getText().replace(classes[i], current_Path));
+                         }
+                     } else {//else add the methods regardless
+                         if (!current_Path.contains("#")) {
+                             current_Path += "#";
+                         }
+                         if (classes[i].equals(current_Path.substring(0, current_Path.indexOf("#")))) {
+                             current_Path = classes[i] + "#" + method;
+                             searchBar.setText(searchBar.getText().replace(classes[i], current_Path));
                          }
                      }
-                     String temp = "";
-                     for(int i = 0; i < t.length; i++){
-                         temp += t[i] + " ";
-                     }
-                     searchBar.setText(temp);
-
                  }
-             } else {
-                 searchBar.setText(searchBar.getText() + " " + current_Path + "#" + method);
              }
+         }catch (NullPointerException e){
+             System.out.println("No method selected");
+         }
      }
     public void RunButtonSelected() throws IOException {
         runningTests.getChildren().clear();

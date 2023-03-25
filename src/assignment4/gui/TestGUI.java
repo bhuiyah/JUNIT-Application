@@ -11,7 +11,6 @@ public class TestGUI extends Application {
 
     static Parent root;
     static FXMLLoader loader;
-
     public static Scene scene;
     static TestGUIController controller;
     @Override

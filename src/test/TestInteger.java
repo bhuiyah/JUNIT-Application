@@ -14,7 +14,7 @@ public class TestInteger {
 
     @Test
     @UseParameters
-    public void testeqauls(int i){
+    public void testequals(int i){
         Assert.assertEquals(i, i);
     }
 
