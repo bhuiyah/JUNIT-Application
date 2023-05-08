@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane blendMode="MULTIPLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: azure;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="assignment4.gui.TestGUIController">
+   <children>
+      <HBox layoutX="10.0" layoutY="10.0" prefHeight="480.0" prefWidth="780.0">
+         <children>
+            <VBox layoutX="10.0" prefHeight="445.0" prefWidth="400.0">
+               <children>
+                  <HBox prefHeight="445.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="listView" blendMode="MULTIPLY" onKeyPressed="#testselect" onMouseClicked="#testselect" onMouseDragged="#testselect" prefHeight="445.0" prefWidth="200.0" style="-fx-background-color: azure;" />
+                        <ListView fx:id="testmethods" blendMode="MULTIPLY" onKeyPressed="#selectmethod" onMouseClicked="#selectmethod" onMouseDragged="#selectmethod" prefHeight="445.0" prefWidth="200.0" style="-fx-background-color: azure; -fx-background-color: azure;" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="400.0" prefWidth="480.0">
+               <children>
+                  <HBox prefHeight="45.0" prefWidth="222.0">
+                     <children>
+                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="RerunButton" mnemonicParsing="false" onAction="#ReRunButtonSelected" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: honeydew; -fx-background-radius: 15;" text="Rerun">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font></Button>
+                           </children>
+                        </StackPane>
+                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#ResetButtonSelected" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: lightyellow; -fx-background-radius: 15px;" text="Reset">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font></Button>
+                           </children>
+                        </StackPane>
+                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="StopButton" mnemonicParsing="false" onAction="#StopButtonSelected" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: mistyrose; -fx-background-radius: 15;" text="Stop">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font></Button>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </HBox>
+                  <ScrollPane fx:id="scrollpane" blendMode="MULTIPLY" prefHeight="400.0" prefWidth="200.0" style="-fx-background-color: azure; -fx-background-radius: 10px;">
+                     <content>
+                        <TextFlow fx:id="runningTests" prefHeight="400.0" prefWidth="420.0" style="-fx-background-color: transparent; -fx-background-radius: 10px;" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox layoutX="10.0" layoutY="463.0">
+         <children>
+            <Button fx:id="RunButton" mnemonicParsing="false" onAction="#RunButtonSelected" prefHeight="30.0" prefWidth="70.0" style="-fx-background-color: lightblue;" text="Run" />
+            <TextField fx:id="searchBar" prefHeight="30.0" prefWidth="710.0" style="-fx-background-color: ghostwhite; -fx-border-color: silver;" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
